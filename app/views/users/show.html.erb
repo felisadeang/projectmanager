@@ -7,39 +7,45 @@ th, td {
 </style>
 
  <% if @manager %>
-
+<h2>Projects</h2>
 	<table>
 		<thead>
 			<tr>
 				<th>Name</th>
 				<th>Description</th>
+				<th>Deadline</th>
 				<th>Status</th>
 			</tr>
 		</thead>
 		<tbody>
 		<% @projects.each do |p| %>
 			<tr>
-				<td><%= p.name %></td>
+				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
+				<td><%= p.deadline %></td>
 				<td>
-					<% if p.tasks %>
+					<% if @tasks.find_by(project_id: p.id) %>
 						<% total = 0 %>
 						<% complete = 0 %>
 						<% p.tasks.each do |t| %>
-		        	<% total += 1 %>
-		        	<% if t.complete %>
-		        		<% complete += 1 %>
-					    <% end %>
+		        			<% total += 1 %>
+		        			<% if t.complete %>
+		        				<% complete += 1 %>
+					    	<% end %>
 						<% end %>
 						<%= ((complete.to_f/total)*100).to_int %>% Complete
+					<% else %>
+						No tasks
 					<% end %>
 				</td>
 			</tr>
 		<% end %>
 		</tbody>
 	</table>
+	<a href="/projects/new" class="btn btn-default">Add Project</a>
 
 <% else %>
+<h2>Projects:</h2>
 	<table>
 		<thead>
 			<tr>
@@ -53,7 +59,7 @@ th, td {
 		<tbody>
 		<% @projects.each do |p| %>
 			<tr>
-				<td><%= p.name %></td>
+				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
 				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
 				<td><%= p.department.name %></td>
@@ -73,5 +79,6 @@ th, td {
 			</tr>
 		<% end %>
 		</tbody>
-	</table>	
+	</table>
+
 <% end %>

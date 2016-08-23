@@ -1,2 +1,95 @@
-<h1>Projects#show</h1>
-<p>Find me in app/views/projects/show.html.erb</p>
+ <% if @manager %>
+
+ <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= @project.name %></h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+        <li>Description: <%= @project.description %></li>
+        <li>Deadline: <%= @project.deadline %></li>
+        <li>Status:
+            <% if @tasks.find_by(project_id: @project.id) %>
+                <% total = 0 %>
+                <% complete = 0 %>
+                <% @project.tasks.each do |t| %>
+                    <% total += 1 %>
+                    <% if t.complete %>
+                        <% complete += 1 %>
+                    <% end %>
+                <% end %>
+                <%= ((complete.to_f/total)*100).to_int %>% Complete
+            <% else %>
+                No tasks
+            <% end %>
+        </li>
+        <li>Tasks
+            <ul>
+                <% @project.tasks.each do |t| %>
+                <li><%= t.name %> | Assigned to: <%= t.member.first_name %> <%= t.member.last_name %> | Status: <% if t.complete%> Completed <% else %> In Progess <% end %></li>
+                <% end %>
+            </ul>
+        </li>
+    </ul>
+    <a href="<%= @project.id %>/edit">Edit Project or Add Tasks</a>
+   </div>
+  </div>
+
+ <% else %>
+
+ <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= @project.name %></h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+        <li>Description: <%= @project.description %></li>
+        <li>Manager: <%= @project.manager.first_name %> <%= @project.manager.last_name %> <a href="mailto:<%= @project.manager.email %>">Contact</a></li>
+        <li>Department: <%= @project.department.name %> Department</li>
+        <li>Project Status:
+            <% if @tasks.find_by(project_id: @project.id) %>
+                <% total = 0 %>
+                <% complete = 0 %>
+                <% @project.tasks.each do |t| %>
+                    <% total += 1 %>
+                    <% if t.complete %>
+                        <% complete += 1 %>
+                    <% end %>
+                <% end %>
+                <%= ((complete.to_f/total)*100).to_int %>% Complete
+            <% else %>
+                No tasks
+            <% end %>
+        </li>
+        <% if @project.tasks.where(member: current_user).count > 0 %>
+
+            <li>Your tasks are
+                <% if @tasks.where(project_id: @project.id, member: current_user).count > 0 %>
+                    <% total = 0 %>
+                    <% complete = 0 %>
+                    <% @project.tasks.where(member: current_user).each do |t| %>
+                        <% total += 1 %>
+                        <% if t.complete %>
+                            <% complete += 1 %>
+                        <% end %>
+                    <% end %>
+                    <%= ((complete.to_f/total)*100).to_int %>% complete.
+                <% else %>
+                    No tasks
+                <% end %>
+
+                 They are:
+                <ul>
+                <% @project.tasks.where(member: current_user).each do |t| %>
+                 <li><%= t.name %> | <% if t.complete %> Marked Complete (<a href="/tasks/<%= t.id %>">Undo</a>) <% else %> <a href="/tasks/<%= t.id %>" data-method="patch">Complete</a><% end %>
+                 </li>
+                <% end %>
+                </ul>
+            </li>
+
+        <% end %>
+    </ul>
+   </div>
+  </div>
+
+ <% end %>
