@@ -1,0 +1,37 @@
+MODELS
+	USER
+	ADMIN
+	PROJECT
+	TASK
+
+INDEX -- Login
+
+USER/NEW -- Registration Page
+USER/SHOW -- User Dashboard
+USER/EDIT -- User Profile
+
+PROJECT/NEW -- Add Project
+	1. Select Team Member from Department using Dependent Dropdown -- JQUERY
+		https://kernelgarden.wordpress.com/2014/02/26/dynamic-select-boxes-in-rails-4/	
+
+PROJECT/SHOW -- Project Detail
+
+PROJECT/EDIT -- Edit Project (MGR ONLY)
+	1. Add Task -- How to save to database?
+		@project = Project.new(project_params)
+
+		if @project.save?
+			@task = Task.new(task_params, project_id: @project.id)
+		else
+			@errors = @project.errors.full_messages
+		end
+
+		def task_params
+			params.require(:task).permitted(:name, :department, :task_owner)
+
+TASK/NEW -- Edit Project (MGR ONLY)
+TASK/SHOW -- 
+TASK/EDIT -- Edit Task (MGR ONLY)
+
+
+

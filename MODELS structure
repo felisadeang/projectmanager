@@ -1,0 +1,33 @@
+MODELS
+	USER
+	PROJECT-USER
+	PROJECT
+	TASK
+	DEPARTMENT
+
+USER
+	First Name
+	Last Name
+	Email
+	Password stuff
+	Department (belongs_to)
+	Is Manager?
+	Project (dependent--manager, has_many)
+	Task (has_many)
+
+rails g model Project-User user:references project:references
+
+rails g model User first_name:string last_name:string email:string password_digest department:references
+
+rails g model Department name:string
+
+rails g model Project name:string description:text deadline:date department:references user:references
+
+rails g model Task name:string description:text deadline:date complete:boolean user:references project:references department:references
+
+
+
+
+def create_user first_name='Kelsey', last_name='Ganes', email='kelsey.ganes@gmail.com', password='password1', password_confirmation='password1', manager=true, department_id=1)
+  User.create(name: name, email: email, password: password, password_confirmation: password_confirmation, manager: manager, department_id: department_id)
+end
