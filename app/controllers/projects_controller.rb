@@ -35,6 +35,15 @@ class ProjectsController < ApplicationController
       @manager = true
     end
   end
+  def show
+    @user = current_user
+    @manager = false
+    @tasks = Task.all
+    @project = Project.find(params[:id])
+    if Project.find_by(user_id: current_user)
+      @manager = true
+    end
+  end
 
   def destroy
     project = Project.find(params[:id])
