@@ -1,9 +1,9 @@
-<% if notice %>
-	<p><%= notice %></p>
+<% if flash[:errors] %>
+    <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
 <% end %>
 
 
-<form action='/sessions/new' method='post'>
+<form action='/sessions' method='post'>
 	<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
 <table>
 	<tbody>

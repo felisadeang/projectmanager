@@ -11,13 +11,14 @@ class SessionsController < ApplicationController
       session[:user_id] = @user.id
       redirect_to user_path(session[:user_id]), notice: "Product successfully updated!"
     else
-      redirect_to sessions_new_path, notice: "Invalid credentials"
+      flash[:errors] = ["Invalid combination"]
+      redirect_to :back
     end
   end
 
   def destroy
     session[:user_id] = nil
-    redirect_to sessions_new_path, notice: "You have been logged out."
+    redirect_to root_path
   end
 
   private

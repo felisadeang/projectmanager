@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
 
   def new
     @user = current_user
+    @projects = Project.where(manager: current_user)
   end
 
   def create
@@ -13,6 +14,15 @@ class ProjectsController < ApplicationController
   		flash[:errors] = @project.errors.full_messages
       	redirect_to :back
       end
+  end
+  def show
+    @user = current_user
+    @manager = false
+    @tasks = Task.all
+    @project = Project.find(params[:id])
+    if Project.find_by(user_id: current_user)
+      @manager = true
+    end
   end
 
   def destroy
