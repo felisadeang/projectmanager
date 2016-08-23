@@ -3,12 +3,15 @@ Rails.application.routes.draw do
   resources :users
   resources :projects
   resources :tasks
-
+  resources :departments
 
   get '/login' => 'sessions#new'
   get '/register' => 'users#new'
-  post 'sessions/new' => 'sessions#create'
+  post 'sessions' => 'sessions#create'
   delete 'sessions' => 'sessions#destroy'
+
+  get 'projects/:id/departments/members/:department_id' => 'projects#members', :format => :json
+
 
 
 

@@ -1,2 +1,78 @@
-<h1>Projects#edit</h1>
-<p>Find me in app/views/projects/edit.html.erb</p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$("select[name='task[department]']").on("change", function () {
+		
+
+		var dept_id = $(this).val();
+		$("#user").children("option").remove();
+		$.get("departments/members/"+ dept_id, function(response) {
+			// loop through resonse, add to second select?
+			$("#user").removeAttr("disabled");
+			for(var i = 0; i < response.users.length; i++){
+				$("#user").append("<option value='"+response.users[i].id+"'>" + response.users[i].first_name+" "+ response.users[i].last_name + "</option>");
+			}
+		})
+	})
+
+	$(document).on('click', '.tasks', function(){
+		$(this).children().toggle();
+	});
+	
+
+	$('#addtask').click(function(){
+		
+		$('#task_table').append('<tr><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department]']").val()+'</td><td>'+$("select[name='task[user_id]']").val()+'</td></tr>');
+		
+		return false;
+
+	});
+
+});
+    
+</script>
+
+<h1>Add a Task</h1>
+
+<form action='/tasks' method='post'>
+	<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Department</th>
+			<th>Owner</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		<input type='hidden' name='task[project_id]' value='<%= @project.id %>'>
+			<td><input type='text' name='task[name]' /></td>
+			<td><select name='task[department]' id='department'>
+					<option selected='select' disabled='disabled'>--</option>
+					<% if @departments %>
+					  <% @departments.each do |d| %>
+					    <option value='<%=d.id%>'><%= d.name %></option>
+					  <% end %>
+					<% end %>
+				</select>
+			</td>
+			<td><select name='task[user_id]' id='user' disabled>
+				
+				</select>
+				
+			</td>
+		</tr>
+		
+
+  </tbody>
+  </table>
+  
+  <!-- <input type='submit' value='' /> -->
+</form>
+<button id="addtask">Add Task</button>
+
+<table>
+<tbody id="task_table">
+</tbody>
+</table>

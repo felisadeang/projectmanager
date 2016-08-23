@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
 
   def new
     @user = current_user
+    @projects = Project.where(manager: current_user)
   end
 
   def create
@@ -13,6 +14,17 @@ class ProjectsController < ApplicationController
   		flash[:errors] = @project.errors.full_messages
       	redirect_to :back
       end
+
+    end
+
+  def show
+    @user = current_user
+    @manager = false
+    @tasks = Task.all
+    @project = Project.find(params[:id])
+    if Project.find_by(user_id: current_user)
+      @manager = true
+    end
   end
 
   def destroy
@@ -20,9 +32,22 @@ class ProjectsController < ApplicationController
     project.destroy if project.manager == current_user
     redirect_to "/users/#{current_user.id}"
   end
+  
+  def edit
+    @project = Project.find(params[:id])
+    @departments = Department.all
+    @task = Task.new
+  end
+
+  def members
+    render :json => { users: Department.find(params[:department_id]).members }
+  end
 
   private
   def project_params
   	params.require(:project).permit(:name, :description, :user_id, :deadline, :department_id)
+  end
+  def task_params
+    params.require(:task).permit(:name, :user_id, :project_id, :department_id)
   end
 end
