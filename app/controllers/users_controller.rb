@@ -1,11 +1,18 @@
 class UsersController < ApplicationController
 	before_action :require_login, except: [:new, :create]
-  before_action :require_correct_user, only: [:show, :edit, :update, :destroy]
+  	before_action :require_correct_user, only: [:show, :edit, :update, :destroy]
 	def index
 	end
 
 	def show
 		@user = User.find(params[:id])
+		@manager = false
+		if Project.find_by(user_id: params[:id])
+			@manager = true
+			@projects = User.find(params[:id]).projects
+		else
+			@projects = User.find(params[:id]).projects_assigned
+		end
 	end
 
 	def edit
