@@ -1,2 +1,77 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<style>
+th, td {
+	border: 1px dotted black;
+	padding: 0px 10px;
+}
+
+</style>
+
+ <% if @manager %>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+		<% @projects.each do |p| %>
+			<tr>
+				<td><%= p.name %></td>
+				<td><%= p.description %></td>
+				<td>
+					<% if p.tasks %>
+						<% total = 0 %>
+						<% complete = 0 %>
+						<% p.tasks.each do |t| %>
+		        	<% total += 1 %>
+		        	<% if t.complete %>
+		        		<% complete += 1 %>
+					    <% end %>
+						<% end %>
+						<%= ((complete.to_f/total)*100).to_int %>% Complete
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
+
+<% else %>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Manager</th>
+				<th>Department</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+		<% @projects.each do |p| %>
+			<tr>
+				<td><%= p.name %></td>
+				<td><%= p.description %></td>
+				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
+				<td><%= p.department.name %></td>
+				<td>
+					<% if p.tasks %>
+						<% total = 0 %>
+						<% complete = 0 %>
+						<% p.tasks.each do |t| %>
+		        	<% total += 1 %>
+		        	<% if t.complete %>
+		        		<% complete += 1 %>
+					    <% end %>
+						<% end %>
+						<%= ((complete.to_f/total)*100).to_int %>% Complete
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>	
+<% end %>
