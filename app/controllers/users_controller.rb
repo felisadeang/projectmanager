@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
-	before_action :require_login, except: [:new, :create]
-  before_action :require_correct_user, only: [:show, :edit, :update, :destroy]
+	before_action :require_login, except: [:index, :new, :create]
+  	before_action :require_correct_user, only: [:show, :edit, :update, :destroy]
 	def index
+	  if session[:user_id]
+  	    redirect_to "/users/#{current_user.id}"
+  	  end
 	end
 
 	def show
@@ -18,6 +21,9 @@ class UsersController < ApplicationController
 	end
 
 	def new
+	  if session[:user_id]
+	    redirect_to "/users/#{current_user.id}"
+	  end
 		@departments = Department.all
 	end
 
@@ -41,5 +47,5 @@ class UsersController < ApplicationController
   private
   def user_params
   	params.require(:user).permit(:email, :name, :password, :password_confirmation)
-  end		
+  end
 end

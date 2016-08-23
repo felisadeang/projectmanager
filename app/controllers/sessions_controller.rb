@@ -1,7 +1,10 @@
 class SessionsController < ApplicationController
   def new
+    if session[:user_id]
+        redirect_to "/users/#{current_user.id}"
+    end
   end
-   
+
   def create
     @user = User.find_by_email(user_params[:email])
     if @user && @user.authenticate(user_params[:password])
@@ -20,5 +23,5 @@ class SessionsController < ApplicationController
   private
   def user_params
   	params.require(:user).permit(:email, :password)
-  end	
+  end
 end

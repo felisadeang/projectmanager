@@ -4,5 +4,5 @@ class Project < ActiveRecord::Base
   has_and_belongs_to_many :members, :join_table => :project_users , :class_name => 'User'
 
   validates :name, :manager, presence: :true
-
+  validates_date :deadline, :after => :today
 end

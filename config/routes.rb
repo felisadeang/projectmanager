@@ -1,15 +1,16 @@
 Rails.application.routes.draw do
-
+  root 'users#index'
   resources :users
   resources :projects
   resources :tasks
 
 
-  get 'sessions/new'
+  get '/login' => 'sessions#new'
+  get '/register' => 'users#new'
   post 'sessions/new' => 'sessions#create'
   delete 'sessions' => 'sessions#destroy'
 
-  root 'users#index'
+
 
 
 
