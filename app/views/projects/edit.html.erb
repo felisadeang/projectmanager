@@ -62,7 +62,7 @@ $(document).ready(function(){
     }).done(function(json){
         console.log("success", json);
         if(json.manager){
-        	$('#task_table').prepend('<tr id="'+json.task+'"><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department_id]'] option:selected").text()+'</td><td>'+$("select[name='task[user_id]'] option:selected").text()+'</td><td><form action="/tasks/'+json.task+'" method="post" class="delete_task_form"><input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"><input type="hidden" name="_method" value="delete"><input type="submit" value="Delete"/></form></td></tr>');
+        	$('#task_table').prepend('<tr id="'+json.task+'"><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department_id]'] option:selected").text()+'</td><td>'+$("select[name='task[user_id]'] option:selected").text()+'</td><td>'+$("input[name='task[deadline]']").val()+'</td><td>'+$("select[name='task[priority]'] option:selected").text()+'</td><td><form action="/tasks/'+json.task+'" method="post" class="delete_task_form"><input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"><input type="hidden" name="_method" value="delete"><input type="submit" value="Delete"/></form></td></tr>');
       	} else {
       		$('#task_table').prepend('<tr id="'+json.task+'"><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department_id]'] option:selected").text()+'</td><td>'+$("select[name='task[user_id]'] option:selected").text()+'</td><td><form action="/tasks/'+json.task+'" method="post" class="complete_task_form"><input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"><input type="hidden" name="_method" value="patch"><input type="submit" value="Mark as Complete"/></form></td></tr>');
       	}
@@ -90,9 +90,14 @@ $(document).ready(function(){
  }
  #project_details td{
  	padding: 3px 10px 3px 0px;
- 	width: 100px;
+ }
+ #project_details input[name="project[description]"]{
+ 	width: 450px;
  }
  
+ #add_task_form select{
+ 	width: 100px;
+ }
 </style>
 
 <h1>Edit Project</h1>
@@ -114,8 +119,22 @@ $(document).ready(function(){
 				<td><%= @project.manager.first_name %> <%= @project.manager.last_name %></td>
 			</tr>
 			<tr>
+				<td>Priority: </td>
+				<td>
+					<% if @project.priority === 1 %>
+              High
+          <% elsif @project.priority === 2 %>
+              Medium
+          <% elsif @project.priority === 3 %>
+              Low
+          <% else %>
+              None
+          <% end %> 
+        </td>
+			</tr>
+			<tr>
 				<td>Description: </td>
-				<td><input type='text' name='project[description]' value='<%= @project.description %>'/></td>
+				<td><textarea name='project[description]' rows='3' cols='50'/><%= @project.description %></textarea></td>
 			</tr>
 			<tr>
 				<td>Deadline: </td>
@@ -135,16 +154,20 @@ $(document).ready(function(){
 	<table>
 		<thead>
 			<tr>
-				<th>Name</th>
+				<th>Task</th>
 				<th>Department</th>
 				<th>Owner</th>
+				<th>Deadline</th>
+				<th>Priority</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 			<input type='hidden' name='task[project_id]' value='<%= @project.id %>'>
 			<input type='hidden' name='task[complete]' value='false'>
+			<input type='hidden' name='project[user_id]' value='false'>
 				<td><input type='text' name='task[name]'/></td>
+				
 				<td><select name='task[department_id]' id='department'>
 						<option selected='select' disabled='disabled'>--</option>
 						<% if @departments %>
@@ -154,8 +177,15 @@ $(document).ready(function(){
 						<% end %>
 					</select>
 				</td>
+				<td><select name='task[user_id]' id='user' disabled></select></td>
+				<td><input type='date' name='task[deadline]'/></td>
 				<td>
-					<select name='task[user_id]' id='user' disabled></select>
+					<select name='task[priority]'>
+						<option selected='select' disabled='disabled'>--</option>
+						<option name='high' value='1'>High</option>
+						<option name='med' value='2'>Medium</option>
+						<option name='low' value='3'>Low</option>
+					</select>
 				</td>
 			</tr>
 	  </tbody>
@@ -166,9 +196,11 @@ $(document).ready(function(){
 <table>
 	<thead>
 		<tr>
-			<th>Task Name</th>
+			<th>Task</th>
 			<th>Department</th>
 			<th>Assignee</th>
+			<th>Deadline</th>
+			<th>Priority Level</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
@@ -178,6 +210,17 @@ $(document).ready(function(){
 			<td><%= t.name %></td>
 			<td><%= t.department.name %></td>
 			<td><%= t.member.first_name %> <%= t.member.last_name %></td>
+			<td><%= t.deadline %></td>
+			<td><% if t.priority === 1 %>
+					High
+					<% elsif t.priority === 2 %>
+					Medium
+					<% elsif t.priority === 3 %>
+					Low
+					<% else %>
+					None
+					<% end %>
+			</td>
 			<td>
 				<% if @manager %>
 					<form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>

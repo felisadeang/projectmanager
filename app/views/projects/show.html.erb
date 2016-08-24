@@ -8,6 +8,17 @@
     <ul>
         <li>Description: <%= @project.description %></li>
         <li>Deadline: <%= @project.deadline %></li>
+        <li>Priority:
+            <% if @project.priority === 1 %>
+                High
+            <% elsif @project.priority === 2 %>
+                Medium
+            <% elsif @project.priority === 3 %>
+                Low
+            <% else %>
+                None
+            <% end %>                        
+        </li>
         <li>Status:
             <% if @project.tasks %>
                 <% total = 0 %>
