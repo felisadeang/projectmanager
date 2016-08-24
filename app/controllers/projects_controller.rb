@@ -14,32 +14,13 @@ class ProjectsController < ApplicationController
   		flash[:errors] = @project.errors.full_messages
       	redirect_to :back
       end
-
     end
 
   def show
     @user = current_user
     @manager = false
-    @tasks = Task.all
     @project = Project.find(params[:id])
-    if Project.find_by(user_id: current_user)
-      @manager = true
-    end
-  end
-  def show
-    @user = current_user
-    @manager = false
-    @tasks = Task.all
-    @project = Project.find(params[:id])
-    if Project.find_by(user_id: current_user)
-      @manager = true
-    end
-  end
-  def show
-    @user = current_user
-    @manager = false
-    @tasks = Task.all
-    @project = Project.find(params[:id])
+    
     if Project.find_by(user_id: current_user)
       @manager = true
     end
@@ -54,18 +35,17 @@ class ProjectsController < ApplicationController
   def edit
     @project = Project.find(params[:id])
     @departments = Department.all
-    @task = Task.new
+    @tasks = Task.where(project_id: params[:id])
   end
 
   def members
     render :json => { users: Department.find(params[:department_id]).members }
   end
 
+
   private
   def project_params
   	params.require(:project).permit(:name, :description, :user_id, :deadline, :department_id)
   end
-  def task_params
-    params.require(:task).permit(:name, :user_id, :project_id, :department_id)
-  end
+
 end

@@ -1,9 +1,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
-	$("select[name='task[department]']").on("change", function () {
+	$("select[name='task[department_id]']").on("change", function () {
 		
-
 		var dept_id = $(this).val();
 		$("#user").children("option").remove();
 		$.get("departments/members/"+ dept_id, function(response) {
@@ -14,27 +13,41 @@ $(document).ready(function(){
 			}
 		})
 	})
-
-	$(document).on('click', '.tasks', function(){
-		$(this).children().toggle();
-	});
 	
-
-	$('#addtask').click(function(){
-		
-		$('#task_table').append('<tr><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department]']").val()+'</td><td>'+$("select[name='task[user_id]']").val()+'</td></tr>');
-		
-		return false;
-
-	});
+	$('#task_form').submit(function() {  
+    var valuesToSubmit = $(this).serialize();
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('action'), //sumbits it to the given url of the form
+        data: valuesToSubmit,
+        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).done(function(json){
+        console.log("success", json);
+        $('#task_table').prepend('<tr><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department_id]'] option:selected").text()+'</td><td>'+$("select[name='task[user_id]'] option:selected").text()+'</td><td></td></tr>');
+    }).catch(function (err) {
+    	console.log("ERRORR", err)
+    })
+    return false; // prevents normal behaviour
+	});	
 
 });
     
 </script>
 
+<style>
+ #task_table th, #task_table td{
+ 	border: 1px dotted black;
+ 	padding: 3px 10px;
+ }
+
+ table, select, input[type='submit'] {
+ 	margin: 7px 10px;
+ }
+</style>
+
 <h1>Add a Task</h1>
 
-<form action='/tasks' method='post'>
+<form action='/tasks' method='post' id='task_form'>
 	<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
 <table>
 	<thead>
@@ -47,12 +60,13 @@ $(document).ready(function(){
 	<tbody>
 		<tr>
 		<input type='hidden' name='task[project_id]' value='<%= @project.id %>'>
+		<input type='hidden' name='task[complete]' value='false'>
 			<td><input type='text' name='task[name]' /></td>
-			<td><select name='task[department]' id='department'>
+			<td><select name='task[department_id]' id='department'>
 					<option selected='select' disabled='disabled'>--</option>
 					<% if @departments %>
 					  <% @departments.each do |d| %>
-					    <option value='<%=d.id%>'><%= d.name %></option>
+					    <option  value='<%=d.id%>'><%= d.name %></option>
 					  <% end %>
 					<% end %>
 				</select>
@@ -68,11 +82,40 @@ $(document).ready(function(){
   </tbody>
   </table>
   
-  <!-- <input type='submit' value='' /> -->
+  <input type='submit' value='Add Task' />
 </form>
-<button id="addtask">Add Task</button>
+<!-- <button id="addtask">Add Task</button> -->
 
 <table>
-<tbody id="task_table">
-</tbody>
+	<thead>
+		<tr>
+			<th>Task Name</th>
+			<th>Department</th>
+			<th>Assignee</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody id="task_table">
+	<% @tasks.each do |t| %>
+		<tr>
+			<td><%= t.name %></td>
+			<td><%= t.department.name %></td>
+			<td><%= t.member.first_name %> <%= t.member.last_name %></td>
+			<td>
+				<% if @manager %>
+					<form action='/tasks/<%= t.id %>' method='post'>
+						<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+						<input type='hidden' name='_method' value='delete'>
+					  <input type='submit' value='Delete'/>
+					</form>
+				<% elsif t.member === current_user%>
+					<button>Mark Complete</button>
+				<% end %>
+			</td>
+
+
+		</tr>
+	<% end %>
+	</tbody>
 </table>
+
