@@ -26,31 +26,13 @@ class ProjectsController < ApplicationController
       @manager = true
     end
   end
-  def show
-    @user = current_user
-    @manager = false
-    @tasks = Task.all
-    @project = Project.find(params[:id])
-    if Project.find_by(user_id: current_user)
-      @manager = true
-    end
-  end
-  def show
-    @user = current_user
-    @manager = false
-    @tasks = Task.all
-    @project = Project.find(params[:id])
-    if Project.find_by(user_id: current_user)
-      @manager = true
-    end
-  end
 
   def destroy
     project = Project.find(params[:id])
     project.destroy if project.manager == current_user
     redirect_to "/users/#{current_user.id}"
   end
-  
+
   def edit
     @project = Project.find(params[:id])
     @departments = Department.all
