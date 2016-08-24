@@ -44,6 +44,10 @@ class ProjectsController < ApplicationController
 
   end
 
+  def update
+
+  end
+
   def members
     render :json => { users: Department.find(params[:department_id]).members }
   end
