@@ -9,7 +9,7 @@
         <li>Description: <%= @project.description %></li>
         <li>Deadline: <%= @project.deadline %></li>
         <li>Status:
-            <% if @tasks.find_by(project_id: @project.id) %>
+            <% if @project.tasks %>
                 <% total = 0 %>
                 <% complete = 0 %>
                 <% @project.tasks.each do |t| %>
@@ -47,7 +47,7 @@
         <li>Manager: <%= @project.manager.first_name %> <%= @project.manager.last_name %> <a href="mailto:<%= @project.manager.email %>">Contact</a></li>
         <li>Department: <%= @project.department.name %> Department</li>
         <li>Project Status:
-            <% if @tasks.find_by(project_id: @project.id) %>
+            <% if @project.tasks %>
                 <% total = 0 %>
                 <% complete = 0 %>
                 <% @project.tasks.each do |t| %>

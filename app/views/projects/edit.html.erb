@@ -1,9 +1,45 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
-	$("select[name='task[department]']").on("change", function () {
-		
+	// TASK DELETE VIA AJAX TO PREVENT RELOAD
+	$(document).on('submit', '.delete_task_form', function(){
+    var valuesToSubmit = $(this).serialize();
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('action'), //sumbits it to the given url of the form
+        data: valuesToSubmit,
+        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).done(function(json){
+        console.log("success", json.task);	
+ 				$('#'+json.task).remove();
+    }).catch(function (err) {
+    	console.log("ERROR", err);
+    })
+    return false; // prevents normal behaviour
+	})
 
+	// UPDATE TASK -- MARK AS COMPLETE
+	$(document).on('submit', '.complete_task_form', function(){
+    var valuesToSubmit = $(this).serialize();
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('action'), //sumbits it to the given url of the form
+        data: valuesToSubmit,
+        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).done(function(json){
+        console.log("success", json.task);
+ 				$('#'+json.task).find('td:last').html("Complete!");
+    }).catch(function (err) {
+    	console.log("ERROR", err);
+    })
+    return false; // prevents normal behaviour
+	})
+
+	// START ADD TASK
+
+	// DEPENDENT / CASCADING DROPDOWNS
+	$("select[name='task[department_id]']").on("change", function () {
+		
 		var dept_id = $(this).val();
 		$("#user").children("option").remove();
 		$.get("departments/members/"+ dept_id, function(response) {
@@ -15,64 +51,153 @@ $(document).ready(function(){
 		})
 	})
 
-	$(document).on('click', '.tasks', function(){
-		$(this).children().toggle();
-	});
-	
-
-	$('#addtask').click(function(){
-		
-		$('#task_table').append('<tr><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department]']").val()+'</td><td>'+$("select[name='task[user_id]']").val()+'</td></tr>');
-		
-		return false;
-
-	});
-
-});
+	// CREATE TASK FORM
+	$('#add_task_form').submit(function() {  
+    var valuesToSubmit = $(this).serialize();
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('action'), //sumbits it to the given url of the form
+        data: valuesToSubmit,
+        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).done(function(json){
+        console.log("success", json);
+        if(json.manager){
+        	$('#task_table').prepend('<tr id="'+json.task+'"><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department_id]'] option:selected").text()+'</td><td>'+$("select[name='task[user_id]'] option:selected").text()+'</td><td><form action="/tasks/'+json.task+'" method="post" class="delete_task_form"><input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"><input type="hidden" name="_method" value="delete"><input type="submit" value="Delete"/></form></td></tr>');
+      	} else {
+      		$('#task_table').prepend('<tr id="'+json.task+'"><td>'+$("input[name='task[name]']").val()+'</td><td>'+$("select[name='task[department_id]'] option:selected").text()+'</td><td>'+$("select[name='task[user_id]'] option:selected").text()+'</td><td><form action="/tasks/'+json.task+'" method="post" class="complete_task_form"><input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"><input type="hidden" name="_method" value="patch"><input type="submit" value="Mark as Complete"/></form></td></tr>');
+      	}
+    }).catch(function (err) {
+    	console.log("ERROR", err)
+    })
+    return false; // prevents normal behaviour
+	})
+}); 
     
 </script>
 
-<h1>Add a Task</h1>
+<style>
+ #task_table th, #task_table td{
+ 	border: 1px dotted black;
+ 	padding: 3px 10px;
+ }
 
-<form action='/tasks' method='post'>
+ table, select, input[type='submit'] {
+ 	margin: 7px 10px;
+ }
+ #project_details{
+ 	margin: 10px;
+
+ }
+ #project_details td{
+ 	padding: 3px 10px 3px 0px;
+ 	width: 100px;
+ }
+ 
+</style>
+
+<h1>Edit Project</h1>
+<form action='/projects/<%= @project.id %>' method='post' class='update_project_form'>
+			<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+			<input type='hidden' name='_method' value='patch'>
+<table id='project_details'>
+	<tbody>
+			<tr>
+				<td>Project: </td>
+				<td><input type='text' name='project[name]' value='<%= @project.name %>'/></td>
+			</tr>
+			<tr>
+				<td>Department: </td>
+				<td><%= @project.department.name %></td>
+			</tr>
+			<tr>
+				<td>Manager: </td>
+				<td><%= @project.manager.first_name %> <%= @project.manager.last_name %></td>
+			</tr>
+			<tr>
+				<td>Description: </td>
+				<td><input type='text' name='project[description]' value='<%= @project.description %>'/></td>
+			</tr>
+			<tr>
+				<td>Deadline: </td>
+				<td><input type='date' name='project[deadline]' value='<%= @project.deadline %>'/></td>
+			</tr>
+		</tbody>
+	</table>
+	<input type='submit' value='Update'/>
+	</form>
+	
+
+
+<h2>Add a Task</h2>
+
+<form action='/tasks' method='post' id='add_task_form'>
 	<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Department</th>
+				<th>Owner</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<input type='hidden' name='task[project_id]' value='<%= @project.id %>'>
+			<input type='hidden' name='task[complete]' value='false'>
+				<td><input type='text' name='task[name]'/></td>
+				<td><select name='task[department_id]' id='department'>
+						<option selected='select' disabled='disabled'>--</option>
+						<% if @departments %>
+						  <% @departments.each do |d| %>
+						    <option  value='<%=d.id%>'><%= d.name %></option>
+						  <% end %>
+						<% end %>
+					</select>
+				</td>
+				<td>
+					<select name='task[user_id]' id='user' disabled></select>
+				</td>
+			</tr>
+	  </tbody>
+	</table>
+	<input type='submit' value='Add Task' />
+</form>
+
 <table>
 	<thead>
 		<tr>
-			<th>Name</th>
+			<th>Task Name</th>
 			<th>Department</th>
-			<th>Owner</th>
+			<th>Assignee</th>
+			<th>Actions</th>
 		</tr>
 	</thead>
-	<tbody>
-		<tr>
-		<input type='hidden' name='task[project_id]' value='<%= @project.id %>'>
-			<td><input type='text' name='task[name]' /></td>
-			<td><select name='task[department]' id='department'>
-					<option selected='select' disabled='disabled'>--</option>
-					<% if @departments %>
-					  <% @departments.each do |d| %>
-					    <option value='<%=d.id%>'><%= d.name %></option>
-					  <% end %>
-					<% end %>
-				</select>
+	<tbody id="task_table">
+	<% @tasks.each do |t| %>
+		<tr id='<%= t.id %>'>
+			<td><%= t.name %></td>
+			<td><%= t.department.name %></td>
+			<td><%= t.member.first_name %> <%= t.member.last_name %></td>
+			<td>
+				<% if @manager %>
+					<form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
+						<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+						<input type='hidden' name='_method' value='delete'>
+					  <input type='submit' value='Delete' class='delete-btn'/>
+					</form>
+					
+				<% elsif t.member === current_user%>
+					<form action='/tasks/<%= t.id %>' method='post' class='complete_task_form'>
+						<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+						<input type='hidden' name='_method' value='patch'>
+					  <input type='submit' value='Mark as Complete'/>
+					</form>
+				<% end %>
 			</td>
-			<td><select name='task[user_id]' id='user' disabled>
-				
-				</select>
-				
-			</td>
+
+
 		</tr>
-		
-
-  </tbody>
-  </table>
-  
-  <!-- <input type='submit' value='' /> -->
-</form>
-<button id="addtask">Add Task</button>
-
-<table>
-<tbody id="task_table">
-</tbody>
+	<% end %>
+	</tbody>
 </table>
+
