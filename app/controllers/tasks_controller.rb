@@ -6,13 +6,31 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.create(task_params)
-    render :json => { message:  "Hello?" }
+    @project = @task.project
+    @manager = false
+    @owner = false
+
+    if @task.project.manager == current_user
+      @manager = true
+    elsif @task.member == current_user
+      @owner = true
+    end
+    render :json => { task: @task.id, manager: @manager, owner: @owner }
   end
 
   def destroy
     task = Task.find(params[:id])
+    @task = task.id
     task.destroy if task.project.manager == current_user
-    redirect_to "/users/#{current_user.id}"
+    
+    render :json => { task: @task }
+  end
+
+  def update
+    task = Task.find(params[:id])
+    task.update(complete: true)
+    @task = task.id
+    render :json => { task: @task }
   end
  
   private

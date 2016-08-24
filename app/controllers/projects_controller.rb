@@ -35,7 +35,13 @@ class ProjectsController < ApplicationController
   def edit
     @project = Project.find(params[:id])
     @departments = Department.all
-    @tasks = Task.where(project_id: params[:id])
+    @tasks = Task.where(project_id: params[:id], complete: false)
+    @manager = false
+    
+    if Project.find_by(user_id: current_user)
+      @manager = true
+    end
+
   end
 
   def members
