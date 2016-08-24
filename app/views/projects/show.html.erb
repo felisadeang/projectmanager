@@ -57,6 +57,7 @@
         <li>Description: <%= @project.description %></li>
         <li>Manager: <%= @project.manager.first_name %> <%= @project.manager.last_name %> <a href="mailto:<%= @project.manager.email %>">Contact</a></li>
         <li>Department: <%= @project.department.name %> Department</li>
+        <li>Deadline: <%= @project.deadline %></li>
         <li>Project Status:
             <% if @project.tasks %>
                 <% total = 0 %>
@@ -92,7 +93,7 @@
                  They are:
                 <ul>
                 <% @project.tasks.where(member: current_user).each do |t| %>
-                 <li><%= t.name %> | <% if t.complete %> Marked Complete (<a href="/tasks/<%= t.id %>">Undo</a>) <% else %> <a href="/tasks/<%= t.id %>" data-method="patch">Complete</a><% end %>
+                 <li><%= t.name %> | <% if t.complete %> Marked Complete (<a href="/tasks/<%= t.id %>" data-method="patch">Undo</a>) <% else %> <a href="/tasks/<%= t.id %>" data-method="patch">Complete</a><% end %>
                  </li>
                 <% end %>
                 </ul>

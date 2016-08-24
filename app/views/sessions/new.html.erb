@@ -2,18 +2,30 @@
     <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
 <% end %>
 
-
-<form action='/sessions' method='post'>
-	<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
-<table>
-	<tbody>
-		<tr>
-  			<td>Email: </td><td><input type='text' name='user[email]' /></td>
-		</tr>
-		<tr>
-			<td>Password: </td><td><input type='password' name='user[password]'/></td>
-		</tr>
-  </tbody>
-  </table>
-  <input type='submit' value='Log In' />
-</form>
+<div class="top"></div>
+<div class="container">
+  <!-- <div class="row"> -->
+    <div class="col-xs-6 col-md-4"></div>
+    <div class="col-xs-6 col-md-4">
+      <form action="/sessions" method="post" class="form-horizontal">
+         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+         <div class="form-group">
+         <div class="col-sm-12">
+         <input type="text" name="user[email]" class="form-control" placeholder="Email">
+         </div>
+         </div>
+         <div class="form-group">
+         <div class="col-sm-12">
+         <input type="password" name="user[password]" class="form-control" placeholder="Password">
+         </div>
+         </div>
+         <div class="form-group">
+         <div class="col-sm-12">
+         <input class="btn btn-secondary btn-lg btn-block" type="submit" value="Login">
+         </div>
+         </div>
+     </form>
+    </div>
+    <div class="col-xs-6 col-md-4"></div>
+  <!-- </div> -->
+</div>

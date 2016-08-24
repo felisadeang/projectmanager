@@ -19,8 +19,8 @@ class ProjectsController < ApplicationController
   def show
     @user = current_user
     @manager = false
+    @tasks = Task.all
     @project = Project.find(params[:id])
-    
     if Project.find_by(user_id: current_user)
       @manager = true
     end
@@ -31,16 +31,20 @@ class ProjectsController < ApplicationController
     project.destroy if project.manager == current_user
     redirect_to "/users/#{current_user.id}"
   end
-  
+
   def edit
     @project = Project.find(params[:id])
     @departments = Department.all
     @tasks = Task.where(project_id: params[:id], complete: false)
     @manager = false
-    
+
     if Project.find_by(user_id: current_user)
       @manager = true
     end
+
+  end
+
+  def update
 
   end
 

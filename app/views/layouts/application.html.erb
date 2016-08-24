@@ -10,13 +10,10 @@
 <body>
 
 <div class="container-fluid">
-  <div class="col-md-2 col-md-offset-10">
+  <div class="col-md-3 col-md-offset-9">
     <% if current_user %>
-    <form action='/sessions' method='post'>
-    <input type='hidden' name="authenticity_token" value="<%= form_authenticity_token %>">
-    <input type='hidden' name='_method' value='delete'>
-    <button type="submit" class="btn btn-default">Log Out</button>
-    </form>
+    <h5>Welcome <%= current_user.first_name %>!</h5>
+    <h5><small><a href="/users/<%= current_user.id%>/edit">EDIT PROFILE</a> | <a href="/sessions" data-method="delete">LOGOUT</a></small></h5>
     <% end %>
   </div>
 <%= yield %>
