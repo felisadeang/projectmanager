@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  require 'date'
   before_action :require_login, only: [:index, :create, :destroy]
 
   def new
@@ -17,20 +18,17 @@ class ProjectsController < ApplicationController
     end
 
   def show
-    @user = current_user
-    @manager = false
-    @alltasks = Task.all
     @project = Project.find(params[:id])
-    @tasks = @project.tasks.order("priority, deadline")
+
+    @departments = Department.all
+    @manager = false
+    @user = current_user
+    @alltasks = Task.all
+    @tasks = Task.where(project_id: params[:id]).order("priority, deadline")
+
     if Project.find_by(user_id: current_user)
       @manager = true
     end
-  end
-
-  def destroy
-    project = Project.find(params[:id])
-    project.destroy if project.manager == current_user
-    redirect_to "/users/#{current_user.id}"
   end
 
   def edit
@@ -42,7 +40,6 @@ class ProjectsController < ApplicationController
     if Project.find_by(user_id: current_user)
       @manager = true
     end
-
   end
 
   def update
@@ -55,6 +52,11 @@ class ProjectsController < ApplicationController
     render :json => { users: Department.find(params[:department_id]).members }
   end
 
+  def destroy
+    project = Project.find(params[:id])
+    project.destroy if project.manager == current_user
+    redirect_to "/users/#{current_user.id}"
+  end
 
   private
   def project_params
