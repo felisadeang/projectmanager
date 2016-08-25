@@ -42,6 +42,7 @@
                 <th>Assigned to</th>
                 <th>Deadline</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -51,6 +52,13 @@
                 <td><%= t.member.first_name %> <%= t.member.last_name %></td>
                 <td><%= t.deadline %></td>
                 <td><% if t.complete%> Completed <% else %> In Progess <% end %></td>
+                <td>
+                  <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
+        						<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+        						<input type='hidden' name='_method' value='delete'>
+        					  <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+        					</form>
+                </td>
               </tr>
               <% end %>
             </tbody>
