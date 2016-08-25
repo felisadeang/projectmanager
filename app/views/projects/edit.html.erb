@@ -10,7 +10,7 @@ $(document).ready(function(){
         data: valuesToSubmit,
         dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).done(function(json){
-        console.log("success", json.task);	
+        console.log("success", json.task);
  				$('#'+json.task).remove();
     }).catch(function (err) {
     	console.log("ERROR", err);
@@ -39,7 +39,7 @@ $(document).ready(function(){
 
 	// DEPENDENT / CASCADING DROPDOWNS
 	$("select[name='task[department_id]']").on("change", function () {
-		
+
 		var dept_id = $(this).val();
 		$("#user").children("option").remove();
 		$.get("departments/members/"+ dept_id, function(response) {
@@ -52,7 +52,7 @@ $(document).ready(function(){
 	})
 
 	// CREATE TASK FORM
-	$('#add_task_form').submit(function() {  
+	$('#add_task_form').submit(function() {
     var valuesToSubmit = $(this).serialize();
     $.ajax({
         type: "POST",
@@ -71,8 +71,8 @@ $(document).ready(function(){
     })
     return false; // prevents normal behaviour
 	})
-}); 
-    
+});
+
 </script>
 
 <style>
@@ -94,7 +94,7 @@ $(document).ready(function(){
  #project_details input[name="project[description]"]{
  	width: 450px;
  }
- 
+
  #add_task_form select{
  	width: 100px;
  }
@@ -129,7 +129,7 @@ $(document).ready(function(){
               Low
           <% else %>
               None
-          <% end %> 
+          <% end %>
         </td>
 			</tr>
 			<tr>
@@ -144,7 +144,7 @@ $(document).ready(function(){
 	</table>
 	<input type='submit' value='Update'/>
 	</form>
-	
+
 
 
 <h2>Add a Task</h2>
@@ -167,7 +167,7 @@ $(document).ready(function(){
 			<input type='hidden' name='task[complete]' value='false'>
 			<input type='hidden' name='project[user_id]' value='false'>
 				<td><input type='text' name='task[name]'/></td>
-				
+
 				<td><select name='task[department_id]' id='department'>
 						<option selected='select' disabled='disabled'>--</option>
 						<% if @departments %>
@@ -190,10 +190,11 @@ $(document).ready(function(){
 			</tr>
 	  </tbody>
 	</table>
-	<input type='submit' value='Add Task' />
+	<input type='submit' class="btn btn-default" value='Add Task' />
 </form>
 
-<table>
+<% if @tasks.count > 0 %>
+<table class="table table-bordered">
 	<thead>
 		<tr>
 			<th>Task</th>
@@ -228,7 +229,7 @@ $(document).ready(function(){
 						<input type='hidden' name='_method' value='delete'>
 					  <input type='submit' value='Delete' class='delete-btn'/>
 					</form>
-					
+
 				<% elsif t.member === current_user%>
 					<form action='/tasks/<%= t.id %>' method='post' class='complete_task_form'>
 						<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
@@ -243,4 +244,4 @@ $(document).ready(function(){
 	<% end %>
 	</tbody>
 </table>
-
+<% end %>

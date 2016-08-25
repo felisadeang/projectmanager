@@ -1,30 +1,41 @@
-<% if flash[:errors] %>
-    <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
-<% end %>
-
-<form action='/users' method='post'>
-	<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
-<table>
-	<tbody>
-		<tr>
-  			<td>First Name: </td><td><input type='text' name='user[first_name]' /></td>
-		</tr>
-		<tr>
-  			<td>Last Name: </td><td><input type='text' name='user[last_name]' /></td>
-		</tr>
-		<tr>
-  			<td>Email: </td><td><input type='text' name='user[email]' /></td>
-		</tr>
-		<tr>
-			<td>Password: </td><td><input type='password' name='user[password]'/></td>
-		</tr>
-		<tr>
-			<td>Confirm Password: </td><td><input type='password' name='user[password_confirmation]'/></td>
-		</tr>
-		<tr>
-			<td>Department: </td>
-			<td>
-				<select name='user[department]'>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-5 col-md-4"></div>
+    <div class="col-xs-8 col-md-4">
+      <% if flash[:errors] %>
+      <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
+      <% end %>
+      <h2><small>Register</small></h2>
+      <form action="/users" method="post" class="form-horizontal">
+        <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="text" name="user[first_name]" class="form-control" placeholder="First Name">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="text" name="user[last_name]" class="form-control" placeholder="Last Name">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="text" name="user[email]" class="form-control" placeholder="Email">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="password" name="user[password]" class="form-control" placeholder="Password">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="password" name="user[password_confirmation]" class="form-control" placeholder="Password Confirmation">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <select name='user[department]' class="form-control">
 					<option selected='select' disabled='disabled'>Select Your Department</option>
 					<% if @departments %>
 					  <% @departments.each do |d| %>
@@ -32,10 +43,16 @@
 					  <% end %>
 					<% end %>
 				</select>
-			</td>
-		</tr>
-
-  </tbody>
-  </table>
-  <input type='submit' value='Sign up' />
-</form>
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input class="btn btn-secondary btn-lg btn-block" type="submit" value="Join">
+        </div>
+        </div>
+      </form>
+      <p>Already a member? <a href="/login">Login here.</a></p>
+  </div>
+  <div class="col-xs-5 col-md-4"></div>
+  </div>
+</div>
