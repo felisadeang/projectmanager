@@ -13,9 +13,9 @@ class UsersController < ApplicationController
 		@tasks = Task.all
 		if Project.find_by(user_id: params[:id])
 			@manager = true
-			@projects = User.find(params[:id]).projects
+			@projects = User.find(params[:id]).projects.order("priority, deadline")
 		else
-			@projects = User.find(params[:id]).projects_assigned
+			@projects = User.find(params[:id]).projects_assigned.order("priority, deadline")
 		end
 	end
 

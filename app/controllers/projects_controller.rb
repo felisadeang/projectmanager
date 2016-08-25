@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
 
   def new
     @user = current_user
-    @projects = Project.where(manager: current_user)
+    @projects = Project.where(manager: current_user).order("priority, deadline")
   end
 
   def create

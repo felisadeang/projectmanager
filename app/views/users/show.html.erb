@@ -14,6 +14,7 @@ th, td {
 				<th>Name</th>
 				<th>Description</th>
 				<th>Deadline</th>
+				<th>Priority</th>
 				<th>Status</th>
 			</tr>
 		</thead>
@@ -23,6 +24,16 @@ th, td {
 				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
 				<td><%= p.deadline %></td>
+				<td><% if p.priority === 1 %>
+					  High
+					<% elsif p.priority === 2 %>
+					  Medium
+					<% elsif p.priority === 3 %>
+					  Low
+					<% else %>
+					  None
+					<% end %>
+  				</td>
 				<td>
 					<% if @tasks.find_by(project_id: p.id) %>
 						<% total = 0 %>
@@ -53,6 +64,7 @@ th, td {
 				<th>Description</th>
 				<th>Manager</th>
 				<th>Department</th>
+				<th>Project Deadline</th>
 				<th>Status</th>
 			</tr>
 		</thead>
@@ -62,6 +74,7 @@ th, td {
 				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
 				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
+				<td><%= p.deadline %></td>
 				<td><%= p.department.name %></td>
 				<td>
 					<% if p.tasks %>

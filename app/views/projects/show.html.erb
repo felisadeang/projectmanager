@@ -17,10 +17,10 @@
                 Low
             <% else %>
                 None
-            <% end %>                        
+            <% end %>
         </li>
         <li>Status:
-            <% if @project.tasks %>
+            <% if @project.tasks.count > 0 %>
                 <% total = 0 %>
                 <% complete = 0 %>
                 <% @project.tasks.each do |t| %>
