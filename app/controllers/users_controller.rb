@@ -22,6 +22,7 @@ class UsersController < ApplicationController
 
 	def edit
 		@user = current_user
+		@departments = Department.all.order('name')
 	end
 
 	def destroy
@@ -38,8 +39,13 @@ class UsersController < ApplicationController
 
 	def update
 		@user = User.find(params[:id])
-		User.where(id: params[:id]).limit(1).update_all(user_params)
-		redirect_to user_path(@user.id)
+		@user.update(user_params)
+			if @user.errors.empty?
+				redirect_to user_path(@user.id)
+			else
+				flash[:errors] = @user.errors.full_messages
+				redirect_to :back
+			end
 	end
 
 	def create
@@ -55,6 +61,6 @@ class UsersController < ApplicationController
 
   private
   def user_params
-  	params.require(:user).permit(:email, :name, :password, :password_confirmation)
+  	params.require(:user).permit(:first_name, :last_name, :email, :name, :password, :password_confirmation)
   end
 end

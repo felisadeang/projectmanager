@@ -114,7 +114,7 @@ th, td {
 	<% @member_tasks.each do |mt| %>
 		<tr>
 			<td><%= mt.name %></td>
-			<td><%= mt.project.name %></td>
+			<td><a href="/projects/<%= mt.project.id %>"><%= mt.project.name %></a></td>
 			<td><%= mt.department.name %> Department</td>
 			<td><%= mt.deadline %></td>
 			<td><% if mt.priority === 1 %>

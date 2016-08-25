@@ -5,7 +5,7 @@
     <h3 class="panel-title"><%= @project.name %></h3>
   </div>
   <div class="panel-body">
-    <ul>
+    <ul style="list-style: none;">
         <li>Description: <%= @project.description %></li>
         <li>Deadline: <%= @project.deadline %></li>
         <li>Priority:
@@ -35,6 +35,36 @@
             <% end %>
         </li>
         <li>
+          <% if @project.tasks.count > 0 %>
+          <% if @project.tasks.exists?(complete: true)%>
+          <p>Pending Tasks</p>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Assigned to</th>
+                <th>Deadline</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @project.tasks.where(complete: false).each do |t| %>
+              <tr>
+                <td><%= t.name %></td>
+                <td><%= t.member.first_name %> <%= t.member.last_name %></td>
+                <td><%= t.deadline %></td>
+                <td>
+                  <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
+                    <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                    <input type='hidden' name='_method' value='delete'>
+                    <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+                  </form>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <p>Completed Tasks</p>
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -46,7 +76,7 @@
               </tr>
             </thead>
             <tbody>
-              <% @project.tasks.each do |t| %>
+              <% @project.tasks.where(complete: true).each do |t| %>
               <tr>
                 <td><%= t.name %></td>
                 <td><%= t.member.first_name %> <%= t.member.last_name %></td>
@@ -63,6 +93,38 @@
               <% end %>
             </tbody>
           </table>
+          <% else %>
+          <p>Pending Tasks</p>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Assigned to</th>
+                <th>Deadline</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @project.tasks.where(complete: false).each do |t| %>
+              <tr>
+                <td><%= t.name %></td>
+                <td><%= t.member.first_name %> <%= t.member.last_name %></td>
+                <td><%= t.deadline %></td>
+                <td>
+                  <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
+                    <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                    <input type='hidden' name='_method' value='delete'>
+                    <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+                  </form>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <% end %>
+          <% else %>
+          Project Tasks: No tasks pending
+          <% end %>
         </li>
     </ul>
     <a href="<%= @project.id %>/edit">Edit Project or Add Tasks</a>
@@ -78,7 +140,7 @@
     <h3 class="panel-title"><%= @project.name %></h3>
   </div>
   <div class="panel-body">
-    <ul>
+    <ul style="list-style: none;">
         <li>Description: <%= @project.description %></li>
         <li>Manager: <%= @project.manager.first_name %> <%= @project.manager.last_name %> <a href="mailto:<%= @project.manager.email %>">Contact</a></li>
         <li>Department: <%= @project.department.name %> Department</li>
@@ -114,8 +176,9 @@
                 <% else %>
                     No tasks
                 <% end %>
-
-                Your tasks:
+            </li>
+            <li>
+                Your tasks for this project:
                 <table class="table table-bordered">
                   <thead>
               			<tr>

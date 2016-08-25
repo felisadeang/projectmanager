@@ -14,7 +14,7 @@
   <div class="col-md-3 col-md-offset-9">
     <% if current_user %>
     <h5>Welcome <%= current_user.first_name %>!</h5>
-    <h5><small><a href="/users/<%= current_user.id%>/edit">EDIT PROFILE</a> | <a href="/sessions" data-method="delete">LOGOUT</a></small></h5>
+    <h5><small><a href="/">HOME</a> | <a href="/users/<%= current_user.id%>/edit">EDIT PROFILE</a> | <a href="/sessions" data-method="delete">LOGOUT</a></small></h5>
     <% end %>
   </div>
 <%= yield %>

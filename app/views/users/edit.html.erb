@@ -1,2 +1,51 @@
-<h1>Users#edit</h1>
-<p>Find me in app/views/users/edit.html.erb</p>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-5 col-md-4"></div>
+    <div class="col-xs-8 col-md-4">
+      <% if flash[:errors] %>
+      <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
+      <% end %>
+      <h2><small>Update</small></h2>
+      <form action="/users/<%= @user.id %>" method="post" class="form-horizontal">
+        <input type='hidden' name='_method' value='patch'>
+        <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="text" name="user[first_name]" class="form-control" value="<%= @user.first_name %>">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="text" name="user[last_name]" class="form-control" value="<%= @user.last_name %>">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input type="text" name="user[email]" class="form-control" value="<%= @user.email %>">
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <select name='user[department]' class="form-control">
+          <% if @departments.count > 0 %>
+          <% @departments.each do |d| %>
+          <% if d.name == @user.department.name %>
+					<option selected='select' value="<%= d.id %>"><%= d.name %></option>
+          <% else %>
+					<option value='<%= d.id %>'><%= d.name %></option>
+					<% end %>
+					<% end %>
+          <% end %>
+				</select>
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
+        <input class="btn btn-secondary btn-lg btn-block" type="submit" value="Update">
+        </div>
+        </div>
+      </form>
+  </div>
+  <div class="col-xs-5 col-md-4"></div>
+  </div>
+</div>
