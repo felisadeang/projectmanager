@@ -1,8 +1,50 @@
 <style>
-body {
-  background-image: url('/assets/big_green_img.png');
-  background-size:100% auto;
+#bottom {
+  background-image:url('/assets/big_green_img.png');
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+  padding-bottom: 19%;
 }
+.logo {
+  padding: 10% 0% 0% 28%;
+}
+.join {
+  padding: 5% 0% 0% 40%;
+}
+#top {
+  display: block;
+}
+#topleft {
+  display: inline-block;
+  padding: 2% 70% 0% 1%;
+}
+#topright {
+  display: inline-block;
+  vertical-align: top;
+  padding: 2% 0% 0% 1%;
+}
+.button {
+  border-radius: .25em;
+  padding: .5em 3em .5em 3em;
+  border: 1px solid gray;
+}
+
 </style>
-<h2>Welcome to Cahoots</h2>
-<h3><a href="/login" class="btn btn-default">Login</a> <a href="/register" class="btn btn-default">Join</a></h3>
+
+<div id="top">
+  <div id="topleft">
+    <p>Collaborate. Work Together</p>
+  </div>
+  <div id="topright">
+  <p><a href="/login" class="button">Login</a> </p>
+  </div>
+</div>
+<div id="bottom">
+<div class="logo">
+  <%= image_tag "cahoots_logo_white.png" %>
+</div>
+<div class="join">
+  <a href="/register"><%= image_tag "join.png" %></a>
+</div>
+</div>
