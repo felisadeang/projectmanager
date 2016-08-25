@@ -27,12 +27,12 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
+    @task.destroy if @task.project.manager == current_user
+
     if Task.find_by(user_id: @task.member.id, project_id: @project.id).present?
       ProjectUser.find_by(project_id: @task.project.id, user_id: @task.member.id).destroy
     end
-
-    @task.destroy if @task.project.manager == current_user
-
+    
     render :json => { task: @task.id }
   end
 
