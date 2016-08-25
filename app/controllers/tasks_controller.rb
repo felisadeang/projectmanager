@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :require_login, only: [:index, :create, :destroy, :update]
-  
+
   def new
   end
 
@@ -26,28 +26,28 @@ class TasksController < ApplicationController
   def destroy
     @task = Task.find(params[:id])
     @project = @task.project
-    
+
     if Task.find_by(user_id: @task.member.id, project_id: @project.id).present?
       ProjectUser.find_by(project_id: @task.project.id, user_id: @task.member.id).destroy
     end
-    
+
     @task.destroy if @task.project.manager == current_user
-    
+
     render :json => { task: @task.id }
   end
 
   def update
     @task = Task.find(params[:id])
-    @task.update(complete: true)
-    render :json => { task: @task.id }
+    @task.update(task_params)
+    redirect_to :back
   end
- 
+
   private
   def task_params
   	params.require(:task).permit(:name, :description, :user_id, :project_id, :complete, :department_id, :priority, :deadline)
-  end	
+  end
 
   def project_user_params
     params.require(:project).permit(:user_id, :project_id)
-  end 
+  end
 end

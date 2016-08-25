@@ -193,7 +193,6 @@ $(document).ready(function(){
 	<input type='submit' class="btn btn-default" value='Add Task' />
 </form>
 
-<% if @tasks.count > 0 %>
 <table class="table table-bordered">
 	<thead>
 		<tr>
@@ -223,20 +222,11 @@ $(document).ready(function(){
 					<% end %>
 			</td>
 			<td>
-				<% if @manager %>
 					<form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
 						<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
 						<input type='hidden' name='_method' value='delete'>
 					  <input type='submit' value='Delete' class='delete-btn'/>
 					</form>
-
-				<% elsif t.member === current_user%>
-					<form action='/tasks/<%= t.id %>' method='post' class='complete_task_form'>
-						<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
-						<input type='hidden' name='_method' value='patch'>
-					  <input type='submit' value='Mark as Complete'/>
-					</form>
-				<% end %>
 			</td>
 
 
@@ -244,4 +234,3 @@ $(document).ready(function(){
 	<% end %>
 	</tbody>
 </table>
-<% end %>

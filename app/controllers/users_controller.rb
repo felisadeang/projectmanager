@@ -15,6 +15,7 @@ class UsersController < ApplicationController
 			@manager = true
 			@projects = User.find(params[:id]).projects.order("priority, deadline")
 		else
+			@member_tasks = Task.where(member: @user).order("priority, deadline")
 			@projects = User.find(params[:id]).projects_assigned.order("priority, deadline")
 		end
 	end

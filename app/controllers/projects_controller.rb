@@ -19,8 +19,9 @@ class ProjectsController < ApplicationController
   def show
     @user = current_user
     @manager = false
-    @tasks = Task.all
+    @alltasks = Task.all
     @project = Project.find(params[:id])
+    @tasks = @project.tasks.order("priority, deadline")
     if Project.find_by(user_id: current_user)
       @manager = true
     end

@@ -58,7 +58,7 @@ th, td {
 
 <% else %>
 <h2>Projects:</h2>
-	<table>
+	<table class="table table-bordered">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -94,5 +94,61 @@ th, td {
 		<% end %>
 		</tbody>
 	</table>
+
+<hr>
+<% if @member_tasks.count > 0 %>
+<h2>Your Tasks</h2>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Task</th>
+			<th>Project</th>
+			<th>Department</th>
+			<th>Deadline</th>
+			<th>Priority</th>
+			<th>Status</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @member_tasks.each do |mt| %>
+		<tr>
+			<td><%= mt.name %></td>
+			<td><%= mt.project.name %></td>
+			<td><%= mt.department.name %> Department</td>
+			<td><%= mt.deadline %></td>
+			<td><% if mt.priority === 1 %>
+							High
+					<% elsif mt.priority === 2 %>
+							Medium
+					<% elsif mt.priority === 3 %>
+							Low
+					<% else %>
+							None
+					<% end %>
+			</td>
+			<td>
+				<% if mt.complete %>
+				Marked Complete
+				<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
+				 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+				 <input type="hidden"name="_method" value="patch">
+				 <input type="hidden" name="task[complete]" value="false">
+				 <input type="submit" value="Undo" style="text-decoration: underline; border: none; outline: none; color: clear;">
+				</form>
+				<% else %>
+				<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
+				 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+				 <input type="hidden"name="_method" value="patch">
+				 <input type="hidden" name="task[complete]" value="true">
+				 <input type="submit" value="Complete" style="text-decoration: underline; border: none; outline: none; color: clear;">
+				</form>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+	</tbody>
+</table>
+<% end %>
 
 <% end %>

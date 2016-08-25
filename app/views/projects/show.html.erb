@@ -34,12 +34,27 @@
                 No tasks
             <% end %>
         </li>
-        <li>Tasks
-            <ul>
-                <% @project.tasks.each do |t| %>
-                <li><%= t.name %> | Assigned to: <%= t.member.first_name %> <%= t.member.last_name %> | Status: <% if t.complete%> Completed <% else %> In Progess <% end %></li>
-                <% end %>
-            </ul>
+        <li>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Assigned to</th>
+                <th>Deadline</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @project.tasks.each do |t| %>
+              <tr>
+                <td><%= t.name %></td>
+                <td><%= t.member.first_name %> <%= t.member.last_name %></td>
+                <td><%= t.deadline %></td>
+                <td><% if t.complete%> Completed <% else %> In Progess <% end %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
         </li>
     </ul>
     <a href="<%= @project.id %>/edit">Edit Project or Add Tasks</a>
@@ -76,7 +91,7 @@
         <% if @project.tasks.where(member: current_user).count > 0 %>
 
             <li>Your tasks are
-                <% if @tasks.where(project_id: @project.id, member: current_user).count > 0 %>
+                <% if @alltasks.where(project_id: @project.id, member: current_user).count > 0 %>
                     <% total = 0 %>
                     <% complete = 0 %>
                     <% @project.tasks.where(member: current_user).each do |t| %>
@@ -90,13 +105,61 @@
                     No tasks
                 <% end %>
 
-                 They are:
-                <ul>
-                <% @project.tasks.where(member: current_user).each do |t| %>
-                 <li><%= t.name %> | <% if t.complete %> Marked Complete (<a href="/tasks/<%= t.id %>" data-method="patch">Undo</a>) <% else %> <a href="/tasks/<%= t.id %>" data-method="patch">Complete</a><% end %>
-                 </li>
-                <% end %>
-                </ul>
+                Your tasks:
+                <table class="table table-bordered">
+                  <thead>
+              			<tr>
+              				<th>Task</th>
+              				<th>Deadline</th>
+              				<th>Status</th>
+              			</tr>
+              		</thead>
+                  <tbody>
+                    <% @tasks.where(member: current_user).each do |t| %>
+                    <tr>
+                      <td><%= t.name %></td>
+                      <td><%= t.deadline %></td>
+                      <td>
+                        <% if t.complete %>
+                        Marked Complete
+                        <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
+                         <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+                         <input type="hidden"name="_method" value="patch">
+                         <input type="hidden" name="task[complete]" value="false">
+                         <input type="submit" value="Undo" style="text-decoration: underline; border: none; outline: none; color: clear;">
+                        </form>
+                        <% else %>
+                        <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
+                         <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+                         <input type="hidden"name="_method" value="patch">
+                         <input type="hidden" name="task[complete]" value="true">
+                         <input type="submit" value="Complete" style="text-decoration: underline; border: none; outline: none; color: clear;">
+                        </form>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+            </li>
+            <li>Other tasks associated with this project:
+              <table class="table table-bordered">
+                <thead>
+            			<tr>
+            				<th>Task</th>
+            				<th>Task Owner</th>
+            				<th>Status</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+                  <% @tasks.where.not(member: current_user).each do |ot| %>
+                  <tr>
+            				<td><%= ot.name %></td>
+                    <td><%= ot.member.first_name %> <%= ot.member.last_name %></td>
+                    <td><% if ot.complete %> Completed <% else %> In Progress <% end %></td>
+                  </tr>
+                  <% end %>
+              </table>
             </li>
 
         <% end %>
