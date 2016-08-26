@@ -15,6 +15,14 @@
   margin-top: 40%;
   padding: 10px 20px 10px 20px;
 }
+.logbutton {
+  padding: 10px 103px 10px 103px;
+  border-radius: 5px;
+  border: 0;
+  background-color: #81CD95;
+  color: white;
+  letter-spacing: 2px;
+}
 </style>
 <div id="newsessions">
 <div class="container">
@@ -26,7 +34,7 @@
       <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
       <% end %>
       <div class="logindiv">
-      <h2><small>Login</small></h2>
+      <h2><small>Log In</small></h2>
       <form action="/sessions" method="post" class="form-horizontal">
         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
         <div class="form-group">
@@ -41,7 +49,7 @@
         </div>
         <div class="form-group">
         <div class="col-sm-12">
-        <input class="btn btn-secondary btn-lg btn-block" type="submit" value="Login">
+        <input class="logbutton" type="submit" value="Log In">
         </div>
         </div>
       </form>
