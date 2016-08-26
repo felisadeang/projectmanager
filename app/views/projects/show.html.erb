@@ -3,13 +3,22 @@
 
  <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title"><%= @project.name %></h3>
+    <h3 class="panel-title" style="font-size: 1.7em;"><%= @project.name %></h3>
   </div>
   <div class="panel-body">
-    <ul style="list-style: none;">
-        <li>Description: <%= @project.description %></li>
-        <li>Deadline: <%= @project.deadline %></li>
-        <li>Priority:
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Description</td>
+          <td><%= @project.description %></td>
+        </tr>
+        <tr>
+          <td>Deadline</td>
+          <td><%= @project.deadline.strftime('%b %d %Y') %></td>
+        </tr>
+        <tr>
+          <td>Priority</td>
+          <td>
             <% if @project.priority === 1 %>
                 High
             <% elsif @project.priority === 2 %>
@@ -19,8 +28,11 @@
             <% else %>
                 None
             <% end %>
-        </li>
-        <li>Status:
+          </td>
+        </tr>
+        <tr>
+          <td>Status</td>
+            <td>
             <% if @project.tasks.count > 0 %>
                 <% total = 0 %>
                 <% complete = 0 %>
@@ -34,11 +46,72 @@
             <% else %>
                 No tasks
             <% end %>
-        </li>
-        <li>
-          <% if @project.tasks.count > 0 %>
-          <% if @project.tasks.exists?(complete: true)%>
-          <p>Pending Tasks</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <% if @project.tasks.count > 0 %>
+      <% if @project.tasks.exists?(complete: true)%>
+      <h4>Pending Tasks</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Assigned to</th>
+            <th>Deadline</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @project.tasks.where(complete: false).each do |t| %>
+          <tr>
+            <td><%= t.name %></td>
+            <td><%= t.member.first_name %> <%= t.member.last_name %></td>
+            <td><%= t.deadline.strftime('%b %d %Y') %></td>
+            <td>
+              <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
+                <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                <input type='hidden' name='_method' value='delete'>
+                <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+              </form>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <h4>Completed Tasks</h4>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Assigned to</th>
+              <th>Deadline</th>
+              <th>Status</th>
+              <th>Date Completed</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @project.tasks.where(complete: true).each do |t| %>
+            <tr>
+              <td><%= t.name %></td>
+              <td><%= t.member.first_name %> <%= t.member.last_name %></td>
+              <td><%= t.deadline.strftime('%b %d %Y') %></td>
+              <td><% if t.complete%> Completed <% else %> In Progess <% end %></td>
+              <td><%= t.updated_at.strftime('%b %d %Y')%></td>
+              <td>
+                <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
+					         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+					         <input type='hidden' name='_method' value='delete'>
+					         <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+                </form>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% else %>
+        <h4>Pending Tasks</h4>
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -53,64 +126,7 @@
               <tr>
                 <td><%= t.name %></td>
                 <td><%= t.member.first_name %> <%= t.member.last_name %></td>
-                <td><%= t.deadline %></td>
-                <td>
-                  <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
-                    <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
-                    <input type='hidden' name='_method' value='delete'>
-                    <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
-                  </form>
-                </td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
-          <p>Completed Tasks</p>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Assigned to</th>
-                <th>Deadline</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @project.tasks.where(complete: true).each do |t| %>
-              <tr>
-                <td><%= t.name %></td>
-                <td><%= t.member.first_name %> <%= t.member.last_name %></td>
-                <td><%= t.deadline %></td>
-                <td><% if t.complete%> Completed <% else %> In Progess <% end %></td>
-                <td>
-                  <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
-  					         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
-  					         <input type='hidden' name='_method' value='delete'>
-  					         <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
-                  </form>
-                </td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
-          <% else %>
-          <p>Pending Tasks</p>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Assigned to</th>
-                <th>Deadline</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @project.tasks.where(complete: false).each do |t| %>
-              <tr>
-                <td><%= t.name %></td>
-                <td><%= t.member.first_name %> <%= t.member.last_name %></td>
-                <td><%= t.deadline %></td>
+                <td><%= t.deadline.strftime('%b %d %Y') %></td>
                 <td>
                   <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
                     <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
@@ -123,9 +139,9 @@
             </tbody>
           </table>
           <% end %>
-          <% else %>
-          Project Tasks: No tasks pending
-          <% end %>
+        <% else %>
+        <h4>Project Tasks: No tasks pending</h4>
+        <% end %>
         </li>
     </ul>
     <hr>
@@ -142,16 +158,37 @@
 
  <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title"><%= @project.name %></h3>
+    <h3 class="panel-title" style="font-size: 1.7em;"><%= @project.name %></h3>
   </div>
   <div class="panel-body">
-    <ul style="list-style: none;">
-        <li>Description: <%= @project.description %></li>
-        <li>Manager: <%= @project.manager.first_name %> <%= @project.manager.last_name %> <a href="mailto:<%= @project.manager.email %>">Contact</a></li>
-        <li>Department: <%= @project.department.name %> Department</li>
-        <li>Deadline: <%= @project.deadline %></li>
-        <li>Project Status:
-            <% if @project.tasks %>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Description</td>
+          <td><%= @project.description %></td>
+        </tr>
+        <tr>
+          <td>Deadline</td>
+          <td><%= @project.deadline.strftime('%b %d %Y') %></td>
+        </tr>
+        <tr>
+          <td>Priority</td>
+          <td>
+            <% if @project.priority === 1 %>
+                High
+            <% elsif @project.priority === 2 %>
+                Medium
+            <% elsif @project.priority === 3 %>
+                Low
+            <% else %>
+                None
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>Status</td>
+            <td>
+            <% if @project.tasks.count > 0 %>
                 <% total = 0 %>
                 <% complete = 0 %>
                 <% @project.tasks.each do |t| %>
@@ -164,63 +201,61 @@
             <% else %>
                 No tasks
             <% end %>
-        </li>
+          </td>
+        </tr>
+      </tbody>
+    </table>
         <% if @project.tasks.where(member: current_user).count > 0 %>
-
-            <li>Your tasks are
-                <% if @alltasks.where(project_id: @project.id, member: current_user).count > 0 %>
-                    <% total = 0 %>
-                    <% complete = 0 %>
-                    <% @project.tasks.where(member: current_user).each do |t| %>
-                        <% total += 1 %>
-                        <% if t.complete %>
-                            <% complete += 1 %>
-                        <% end %>
-                    <% end %>
-                    <%= ((complete.to_f/total)*100).to_int %>% complete.
-                <% else %>
-                    No tasks
-                <% end %>
-            </li>
-            <li>
-                Your tasks for this project:
-                <table class="table table-bordered">
-                  <thead>
-              			<tr>
-              				<th>Task</th>
-              				<th>Deadline</th>
-              				<th>Status</th>
-              			</tr>
-              		</thead>
-                  <tbody>
-                    <% @tasks.where(member: current_user).each do |t| %>
-                    <tr>
-                      <td><%= t.name %></td>
-                      <td><%= t.deadline %></td>
-                      <td>
-                        <% if t.complete %>
-                        Marked Complete
-                        <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
-                         <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-                         <input type="hidden"name="_method" value="patch">
-                         <input type="hidden" name="task[complete]" value="false">
-                         <input type="submit" value="Undo" style="text-decoration: underline; border: none; outline: none; color: clear;">
-                        </form>
-                        <% else %>
-                        <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
-                         <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-                         <input type="hidden"name="_method" value="patch">
-                         <input type="hidden" name="task[complete]" value="true">
-                         <input type="submit" value="Complete" style="text-decoration: underline; border: none; outline: none; color: clear;">
-                        </form>
-                        <% end %>
-                      </td>
-                    </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-            </li>
-            <li>Other tasks associated with this project:
+          <% if @alltasks.where(project_id: @project.id, member: current_user).count > 0 %>
+              <% total = 0 %>
+              <% complete = 0 %>
+              <% @project.tasks.where(member: current_user).each do |t| %>
+                  <% total += 1 %>
+                  <% if t.complete %>
+                      <% complete += 1 %>
+                  <% end %>
+              <% end %>
+              Your tasks are <%= ((complete.to_f/total)*100).to_int %>% complete!
+          <% else %>
+              <b>You have no tasks.</b>
+          <% end %>
+          <h4>Your tasks for this project</h4>
+          <table class="table table-bordered">
+            <thead>
+        			<tr>
+        				<th>Task</th>
+        				<th>Deadline</th>
+        				<th>Status</th>
+        			</tr>
+        		</thead>
+            <tbody>
+              <% @tasks.where(member: current_user).each do |t| %>
+              <tr>
+                <td><%= t.name %></td>
+                <td><%= t.deadline.strftime('%b %d %Y') %></td>
+                <td>
+                  <% if t.complete %>
+                  Completed <%= t.updated_at.strftime('%b %d %Y') %>
+                  <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
+                   <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"/>
+                   <input type="hidden" name="_method" value="patch"/>
+                   <input type="hidden" name="task[complete]" value="false"/>
+                   <input type="submit" value="Mark Incomplete" class="btn btn-default"/>
+                  </form>
+                  <% else %>
+                  <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
+                   <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"/>
+                   <input type="hidden" name="_method" value="patch"/>
+                   <input type="hidden" name="task[complete]" value="true"/>
+                   <input type="submit" value="Mark Complete" class="btn btn-default"/>
+                  </form>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+          <h4>Other tasks associated with this project</h4>
               <table class="table table-bordered">
                 <thead>
             			<tr>
@@ -238,10 +273,7 @@
                   </tr>
                   <% end %>
               </table>
-            </li>
-
         <% end %>
-    </ul>
    </div>
   </div>
 

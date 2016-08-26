@@ -1,8 +1,8 @@
 
-<% if @projects.where(['deadline > ?', DateTime.now]).any? %>
-<h2>Current Projects</h2>
-<% if @manager %>
-	
+<% if @projects.any? %>
+	<% if @projects.where(['deadline > ?', DateTime.now]).any? %>
+	<h2>Current Projects</h2>
+	<% if @manager %>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -19,7 +19,7 @@
 			<tr>
 				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
-				<td><%= p.deadline.strftime('%m/%d/%Y') %></td>
+				<td><%= p.deadline.strftime('%b %d %Y') %></td>
 				<td><% if p.priority === 1 %>
 					  High
 					<% elsif p.priority === 2 %>
@@ -43,7 +43,7 @@
 						<% if ((complete.to_f/total)*100).to_int < 100 %>
 							<%= ((complete.to_f/total)*100).to_int %>% Complete
 						<% else %>
-						Completed
+						Completed <%= t.updated_at.strftime('%b %d %Y') %>
 						<% end %>
 					<% else %>
 						No Tasks
@@ -56,7 +56,7 @@
 	<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
 
 <% else %>
-<% if @projects.where(['deadline > ?', DateTime.now]) %>
+	<% if @projects.where(['deadline > ?', DateTime.now]) %>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -74,7 +74,7 @@
 				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
 				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
-				<td><%= p.deadline.strftime('%m/%d/%Y') %></td>
+				<td><%= p.deadline.strftime('%b %d %Y') %></td>
 				<td><%= p.department.name %></td>
 				<td>
 					<% if p.tasks %>
@@ -89,7 +89,7 @@
 						<% if ((complete.to_f/total)*100).to_int < 100 %>
 							<%= ((complete.to_f/total)*100).to_int %>% Complete
 						<% else %>
-						Completed
+						Completed <%= t.updated_at.strftime('%b %d %Y') %>
 						<% end %>
 					<% else %>
 						No Tasks
@@ -99,63 +99,63 @@
 		<% end %>
 		</tbody>
 	</table>
-<hr>
-<% if @member_tasks.count > 0 %>
-<h2>Your Tasks</h2>
+	<hr>
+	<% if @member_tasks.count > 0 %>
+	<h2>Your Tasks</h2>
 
-<table class="table table-bordered">
-	<thead>
-		<tr>
-			<th>Task</th>
-			<th>Project</th>
-			<th>Department</th>
-			<th>Deadline</th>
-			<th>Priority</th>
-			<th>Status</th>
-		</tr>
-	</thead>
-	<tbody>
-	<% @member_tasks.each do |mt| %>
-		<% if mt.project.deadline > DateTime.now %>
-		<tr>
-			<td><%= mt.name %></td>
-			<td><a href="/projects/<%= mt.project.id %>"><%= mt.project.name %></a></td>
-			<td><%= mt.department.name %> Department</td>
-			<td><%= mt.deadline.strftime('%m/%d/%Y') %></td>
-			<td><% if mt.priority === 1 %>
-							High
-					<% elsif mt.priority === 2 %>
-							Medium
-					<% elsif mt.priority === 3 %>
-							Low
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Task</th>
+				<th>Project</th>
+				<th>Department</th>
+				<th>Deadline</th>
+				<th>Priority</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+		<% @member_tasks.each do |mt| %>
+			<% if mt.project.deadline > DateTime.now %>
+			<tr>
+				<td><%= mt.name %></td>
+				<td><a href="/projects/<%= mt.project.id %>"><%= mt.project.name %></a></td>
+				<td><%= mt.department.name %> Department</td>
+				<td><%= mt.deadline.strftime('%b %d %Y') %></td>
+				<td><% if mt.priority === 1 %>
+								High
+						<% elsif mt.priority === 2 %>
+								Medium
+						<% elsif mt.priority === 3 %>
+								Low
+						<% else %>
+								None
+						<% end %>
+				</td>
+				<td>
+					<% if mt.complete %>
+					Completed <%= mt.updated_at.strftime('%b %d %Y') %>
+					<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
+					 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					 <input type="hidden" name="_method" value="patch">
+					 <input type="hidden" name="task[complete]" value="false">
+					 <input type="submit" value="Mark Incomplete" class="btn btn-default">
+					</form>
 					<% else %>
-							None
+					<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
+					 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					 <input type="hidden" name="_method" value="patch">
+					 <input type="hidden" name="task[complete]" value="true">
+					 <input type="submit" value="Complete" class="btn btn-default">
+					</form>
 					<% end %>
-			</td>
-			<td>
-				<% if mt.complete %>
-				Marked Complete
-				<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
-				 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-				 <input type="hidden" name="_method" value="patch">
-				 <input type="hidden" name="task[complete]" value="false">
-				 <input type="submit" value="Undo" style="text-decoration: underline; border: none; outline: none; color: clear;">
-				</form>
-				<% else %>
-				<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
-				 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-				 <input type="hidden" name="_method" value="patch">
-				 <input type="hidden" name="task[complete]" value="true">
-				 <input type="submit" value="Complete" style="text-decoration: underline; border: none; outline: none; color: clear;">
-				</form>
-				<% end %>
-			</td>
-		</tr>
+				</td>
+			</tr>
+			<% end %>
 		<% end %>
+		</tbody>
+	</table>
 	<% end %>
-	</tbody>
-</table>
-<% end %>
 <% end %>
 <% end %>
 <% end %>
@@ -181,7 +181,7 @@
 			<tr>
 				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
-				<td><%= p.deadline.strftime('%m/%d/%Y') %></td>
+				<td><%= p.deadline.strftime('%b %d %Y') %></td>
 				<td><% if p.priority === 1 %>
 					  High
 					<% elsif p.priority === 2 %>
@@ -235,7 +235,7 @@
 				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
 				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
-				<td><%= p.deadline.strftime('%m/%d/%Y') %></td>
+				<td><%= p.deadline.strftime('%b %d %Y') %></td>
 				<td><%= p.department.name %></td>
 				<td>
 					<% if p.tasks %>
@@ -250,7 +250,7 @@
 						<% if ((complete.to_f/total)*100).to_int < 100 %>
 							<%= ((complete.to_f/total)*100).to_int %>% Complete
 						<% else %>
-						Completed
+						Complete
 						<% end %>
 					<% else %>
 						No Tasks
@@ -262,9 +262,8 @@
 	</table>
 <hr>
 
-
 <% end %>
-
+<% end %>
 
 <% else %>
 	<div class="col-md-12"><h3>You don't have any projects at this time.</h3></div>
