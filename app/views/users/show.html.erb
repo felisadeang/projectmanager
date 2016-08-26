@@ -43,7 +43,7 @@
 						<% if ((complete.to_f/total)*100).to_int < 100 %>
 							<%= ((complete.to_f/total)*100).to_int %>% Complete
 						<% else %>
-						Completed <%= t.updated_at.strftime('%b %d %Y') %>
+						Completed
 						<% end %>
 					<% else %>
 						No Tasks
@@ -89,7 +89,7 @@
 						<% if ((complete.to_f/total)*100).to_int < 100 %>
 							<%= ((complete.to_f/total)*100).to_int %>% Complete
 						<% else %>
-						Completed <%= t.updated_at.strftime('%b %d %Y') %>
+						Completed
 						<% end %>
 					<% else %>
 						No Tasks
@@ -164,7 +164,7 @@
 <% if @projects.where(['deadline < ?', DateTime.now]).any? %>
 <h2>Past Projects</h2>
 <% if @manager %>
-	
+
 	<table class="table table-bordered">
 		<thead>
 			<tr>
