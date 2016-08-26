@@ -6,5 +6,5 @@ class Project < ActiveRecord::Base
   has_many :tasks
   
   validates :name, :manager, presence: :true
-  validates_date :deadline, :after => :today
+  # validates_date :deadline, :after => :today
 end

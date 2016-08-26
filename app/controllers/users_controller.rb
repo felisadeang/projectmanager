@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+	require 'date'
 	before_action :require_login, except: [:index, :new, :create]
   	before_action :require_correct_user, only: [:show, :edit, :update, :destroy]
 	def index
@@ -8,6 +9,7 @@ class UsersController < ApplicationController
 	end
 
 	def show
+		@today = Time.now.strftime('%Y-%m-%d')
 		@user = User.find(params[:id])
 		@manager = false
 		@tasks = Task.all

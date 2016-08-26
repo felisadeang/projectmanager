@@ -1,10 +1,11 @@
 class ProjectsController < ApplicationController
   require 'date'
-  before_action :require_login, only: [:index, :create, :destroy]
+  before_action :require_login
 
   def new
     @user = current_user
     @projects = Project.where(manager: current_user).order("priority, deadline")
+    @tomorrow = Time.now.tomorrow.strftime('%Y-%m-%d')
   end
 
   def create
@@ -19,7 +20,6 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find(params[:id])
-
     @departments = Department.all
     @manager = false
     @user = current_user
@@ -32,6 +32,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
+    @tomorrow = Time.now.tomorrow.strftime('%Y-%m-%d')
     @project = Project.find(params[:id])
     @departments = Department.all
     @tasks = Task.where(project_id: params[:id], complete: false).order("priority, deadline")

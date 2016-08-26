@@ -178,7 +178,7 @@ $(document).ready(function(){
 					</select>
 				</td>
 				<td><select name='task[user_id]' id='user' disabled></select></td>
-				<td><input type='date' name='task[deadline]' placeholder="mm/dd/yyyy"/></td>
+				<td><input type='date' name='task[deadline]' value='<%= @tomorrow %>'/></td>
 				<td>
 					<select name='task[priority]'>
 						<option selected='select' disabled='disabled'>--</option>
