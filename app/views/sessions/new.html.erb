@@ -29,7 +29,7 @@
   <div class="row">
     <div class="col-xs-5 col-md-4"></div>
     <div class="col-xs-8 col-md-4">
-      <p class="imglogo2"><%= image_tag "cahoots_logo_secondary.png" %></p>
+      <p class="imglogo2"><a href="/"><%= image_tag "cahoots_logo_secondary.png" %></a></p>
       <% if flash[:errors] %>
       <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
       <% end %>
