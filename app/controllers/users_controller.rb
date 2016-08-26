@@ -38,7 +38,7 @@ class UsersController < ApplicationController
 	end
 
 	def create
-    @user = User.new(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], password: params[:password], department: Department.find(params[:department]))
+    @user = User.new(user_params)
     if @user.valid?
 			@user.save
       session[:user_id] = @user.id
@@ -62,6 +62,6 @@ class UsersController < ApplicationController
 
   private
   def user_params
-  	params.require(:user).permit(:first_name, :last_name, :email, :name, :password, :password_confirmation)
+  	params.require(:user).permit(:first_name, :last_name, :email, :name, :password, :password_confirmation, :department_id)
   end
 end

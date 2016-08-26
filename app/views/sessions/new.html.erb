@@ -1,6 +1,6 @@
 <style>
 #newsessions {
-  background-image:url('/assets/big_green_img.png');
+  background-image:url('/assets/background.png');
   background-repeat:no-repeat;
   background-size:cover;
   background-position:center;
@@ -8,12 +8,15 @@
   text-align: center;
 }
 .imglogo2 {
-  padding-top: 5%;
+  padding-top: 25%
+}
+#logorow {
+  padding-top: 50px;
 }
 .logindiv {
   background-color: white;
-  margin-top: 40%;
-  padding: 10px 20px 10px 20px;
+  margin-top: 20%;
+  padding: 0px 20px 10px 20px;
 }
 .logbutton {
   padding: 10px 103px 10px 103px;
@@ -26,10 +29,13 @@
 </style>
 <div id="newsessions">
 <div class="container">
+  <div class="row" id="logorow">
+    <a class="imglogo" href="/"><%= image_tag "cahoots_logo_white.png" %></a>
+  </div>
   <div class="row">
     <div class="col-xs-5 col-md-4"></div>
     <div class="col-xs-8 col-md-4">
-      <p class="imglogo2"><a href="/"><%= image_tag "cahoots_logo_secondary.png" %></a></p>
+      <!-- <p class="imglogo2"><a href="/"><%= image_tag "cahoots_logo_white.png" %></a></p> -->
       <% if flash[:errors] %>
       <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
       <% end %>

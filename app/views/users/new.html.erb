@@ -1,6 +1,6 @@
 <style>
 #newuser {
-  background-image:url('/assets/big_green_img.png');
+  background-image:url('/assets/background.png');
   background-repeat:no-repeat;
   background-size:cover;
   background-position:center;
@@ -11,7 +11,7 @@ h2 {
   letter-spacing: 1px;
 }
 .imglogo {
-  padding-top: 5%;
+  padding-top: 45%;
 }
 #holder {
   margin-top: 10%;
@@ -26,13 +26,19 @@ h2 {
   color: white;
   letter-spacing: 2px;
 }
+#logorow {
+  padding-top: 50px;
+}
 </style>
 <div id="newuser">
   <div class="container">
+    <div class="row" id="logorow">
+      <a class="imglogo" href="/"><%= image_tag "cahoots_logo_white.png" %></a>
+    </div>
   <div class="row">
     <div class="col-xs-5 col-md-4"></div>
     <div class="col-xs-8 col-md-4">
-      <p class="imglogo"><a href="/"><%= image_tag "cahoots_logo_secondary.png" %></a></p>
+
       <% if flash[:errors] %>
       <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
       <% end %>
@@ -42,32 +48,32 @@ h2 {
         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
         <div class="form-group">
         <div class="col-sm-12">
-        <input type="text" name="first_name" class="form-control" placeholder="First Name">
+        <input type="text" name="user[first_name]" class="form-control" placeholder="First Name">
         </div>
         </div>
         <div class="form-group">
         <div class="col-sm-12">
-        <input type="text" name="last_name" class="form-control" placeholder="Last Name">
+        <input type="text" name="user[last_name]" class="form-control" placeholder="Last Name">
         </div>
         </div>
         <div class="form-group">
         <div class="col-sm-12">
-        <input type="text" name="email" class="form-control" placeholder="Email">
+        <input type="text" name="user[email]" class="form-control" placeholder="Email">
         </div>
         </div>
         <div class="form-group">
         <div class="col-sm-12">
-        <input type="password" name="password" class="form-control" placeholder="Password">
+        <input type="password" name="user[password]" class="form-control" placeholder="Password">
         </div>
         </div>
         <div class="form-group">
         <div class="col-sm-12">
-        <input type="password" name="password_confirmation" class="form-control" placeholder="Password Confirmation">
+        <input type="password" name="user[password_confirmation]" class="form-control" placeholder="Password Confirmation">
         </div>
         </div>
         <div class="form-group">
         <div class="col-sm-12">
-        <select name='department' class="form-control">
+        <select name='user[department_id]' class="form-control">
 					<option selected='select' disabled='disabled'>Select Your Department</option>
 					<% if @departments %>
 					  <% @departments.each do |department| %>
