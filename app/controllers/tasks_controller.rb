@@ -25,16 +25,31 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task = Task.find(params[:id])
-    @project = @task.project
+    if request.xhr?
+      @task = Task.find(params[:id])
+      @project = @task.project
 
-    @task.destroy if @task.project.manager == current_user
+      @task.destroy if @task.project.manager == current_user
 
-    if Task.find_by(user_id: @task.member.id, project_id: @project.id).present?
-      ProjectUser.find_by(project_id: @task.project.id, user_id: @task.member.id).destroy
+      if !Task.find_by(user_id: @task.member.id, project_id: @project.id).present?
+        ProjectUser.find_by(project_id: @task.project.id, user_id: @task.member.id).destroy
+      end
+
+      render :json => { task: @task.id }
+    else
+      @task = Task.find(params[:id])
+      @project = @task.project
+
+      if @task.project.manager == current_user
+        @task.destroy
+      end
+      if Task.where(user_id: @task.member.id, project_id: @project.id).any?
+        redirect_to :back
+      else
+        ProjectUser.find_by(project_id: @task.project.id, user_id: @task.member.id).destroy
+        redirect_to :back
+      end
     end
-    
-    render :json => { task: @task.id }
   end
 
   def update
