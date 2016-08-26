@@ -1,7 +1,7 @@
-<% if @projects.where(['deadline > ?', DateTime.now]) %>
-<% if @manager %>
 
-<h2>Projects</h2>
+<% if @projects.where(['deadline > ?', DateTime.now]).any? %>
+<h2>Current Projects</h2>
+<% if @manager %>
 	
 	<table class="table table-bordered">
 		<thead>
@@ -57,7 +57,6 @@
 
 <% else %>
 <% if @projects.where(['deadline > ?', DateTime.now]) %>
-<h2>Projects</h2>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -162,9 +161,9 @@
 <% end %>
 <!-- PAST DUE PROJECTS -->
 
-<% if @projects.where(['deadline < ?', DateTime.now]) %>
-<% if @manager %>
+<% if @projects.where(['deadline < ?', DateTime.now]).any? %>
 <h2>Past Projects</h2>
+<% if @manager %>
 	
 	<table class="table table-bordered">
 		<thead>
@@ -219,7 +218,6 @@
 	<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
 
 <% else %>
-<h2>Past Projects</h2>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -267,5 +265,11 @@
 
 <% end %>
 
+
+<% else %>
+	<div class="col-md-12"><h3>You don't have any projects at this time.</h3></div>
+	<% if current_user.manager %>
+		<div class="col-md-2"><a href="/projects/new" class="btn btn-default">Start a New Project</a></div>
+	<% end %>
 
 <% end %>
