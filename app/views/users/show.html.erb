@@ -74,8 +74,8 @@
 				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
 				<td><%= p.description %></td>
 				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
-				<td><%= p.deadline.strftime('%b %d %Y') %></td>
 				<td><%= p.department.name %></td>
+				<td><%= p.deadline.strftime('%b %d %Y') %></td>
 				<td>
 					<% if p.tasks %>
 						<% total = 0 %>
