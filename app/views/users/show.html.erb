@@ -1,9 +1,10 @@
-
-<% if @projects.any? %>
-	<% if @projects.where(['deadline > ?', DateTime.now]).any? %>
+<!-- DETERMINE IF PROJECTS EXIST (EITHER IN PM CAPACITY OR AS TEAM MEMBER) OR NOT -->
+<% if @projects.any? %> <!-- check if there are any projects to determine if tables should be loaded -->
+	<% if @projects.where(['deadline > ?', DateTime.now]).any? %> <!-- checks if table for current projects should be loaded -->
 	<h2>Current Projects</h2>
 	<% if @manager %>
-	<table class="table table-bordered">
+		<!-- this version of the current projects table loads for project managers -->
+		<table class="table table-bordered">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -14,261 +15,261 @@
 			</tr>
 		</thead>
 		<tbody>
-
-		<% @projects.where(['deadline > ?', DateTime.now]).each do |p| %>
+			<% @projects.where(['deadline > ?', DateTime.now]).each do |cp| %> <!-- cp for current projects -->
 			<tr>
-				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
-				<td><%= p.description %></td>
-				<td><%= p.deadline.strftime('%b %d %Y') %></td>
-				<td><% if p.priority === 1 %>
+				<td><a href="/projects/<%= cp.id %>"><%= cp.name %></a></td>
+				<td><%= cp.description %></td>
+				<td><%= cp.deadline.strftime('%b %d %Y') %></td>
+				<td><% if cp.priority === 1 %> <!-- priority assigned with integers. 1 being high -->
 					  High
-					<% elsif p.priority === 2 %>
+					<% elsif cp.priority === 2 %> <!-- priority assigned with integers. 2 being medium -->
 					  Medium
-					<% elsif p.priority === 3 %>
+					<% elsif cp.priority === 3 %> <!-- priority assigned with integers. 3 being low -->
 					  Low
-					<% else %>
+					<% else %> <!-- priority assigned with integers. this is if it didn't happen to have been assigned an integer -->
 					  None
 					<% end %>
-  				</td>
-				<td>
-					<% if @tasks.find_by(project_id: p.id) %>
-						<% total = 0 %>
-						<% complete = 0 %>
-						<% p.tasks.each do |t| %>
-		        			<% total += 1 %>
-		        			<% if t.complete %>
-		        				<% complete += 1 %>
-				    		<% end %>
-						<% end %>
-						<% if ((complete.to_f/total)*100).to_int < 100 %>
+	  			</td>
+				<td><% if @tasks.find_by(project_id: cp.id) %>
+						<% total = 0 %> <!-- variable that counts number of tasks associated with each project -->
+						<% complete = 0 %> <!-- variable that keeps track of completed tasks (of the total) -->
+						<% cp.tasks.each do |t| %>
+			        		<% total += 1 %> <!-- increments total count with each task -->
+			        		<% if t.complete %>
+			        			<% complete += 1 %> <!-- increment complete count -->
+					    	<% end %> <!-- ends if statement checking if task is complete -->
+						<% end %> <!-- ends looping through cp.tasks.each -->
+						<% if ((complete.to_f/total)*100).to_int < 100 %> <!-- if tasks aren't 100% completed, math performed to check for percentage completion -->
 							<%= ((complete.to_f/total)*100).to_int %>% Complete
-						<% else %>
-						Completed
-						<% end %>
-					<% else %>
+						<% else %> <!-- else if tasks are completed, marks the whole thing completed -->
+							Completed
+						<% end %> <!-- ends if/else statement checking for percent completion -->
+					<% else %> <!-- else if no tasks associated with project -->
 						No Tasks
-					<% end %>
+					<% end %> <!-- end looping through tasks that belong to project -->
 				</td>
 			</tr>
-		<% end %>
-		</tbody>
-	</table>
-	<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
+			<% end %> <!-- end looping through projects with deadline in the future for managers -->
+			</tbody>
+		</table>
+		<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
+		<!-- end of current projects view for project managers -->
 
-<% else %>
-	<% if @projects.where(['deadline > ?', DateTime.now]) %>
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Manager</th>
-				<th>Department</th>
-				<th>Project Deadline</th>
-				<th>Status</th>
-			</tr>
-		</thead>
-		<tbody>
-		<% @projects.where(['deadline > ?', DateTime.now]).each do |p| %>
-			<tr>
-				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
-				<td><%= p.description %></td>
-				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
-				<td><%= p.department.name %></td>
-				<td><%= p.deadline.strftime('%b %d %Y') %></td>
-				<td>
-					<% if p.tasks %>
-						<% total = 0 %>
-						<% complete = 0 %>
-						<% p.tasks.each do |t| %>
-		        	<% total += 1 %>
-		        	<% if t.complete %>
-		        		<% complete += 1 %>
-					    <% end %>
-						<% end %>
-						<% if ((complete.to_f/total)*100).to_int < 100 %>
-							<%= ((complete.to_f/total)*100).to_int %>% Complete
-						<% else %>
-						Completed
-						<% end %>
-					<% else %>
-						No Tasks
-					<% end %>
-				</td>
-			</tr>
-		<% end %>
-		</tbody>
-	</table>
-	<hr>
-	<% if @member_tasks.count > 0 %>
-	<h2>Your Tasks</h2>
+	<!-- ELSE IF NOT PROJECT MANAGER -->
+	<% else %> 
+		<% if @projects.where(['deadline > ?', DateTime.now]) %> <!-- checks if table for current projects should be loaded -->
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Manager</th>
+						<th>Department</th>
+						<th>Project Deadline</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+				<% @projects.where(['deadline > ?', DateTime.now]).each do |cp| %> <!-- cp for current projects -->
+					<tr>
+						<td><a href="/projects/<%= cp.id %>"><%= cp.name %></a></td>
+						<td><%= cp.description %></td>
+						<td><%= cp.manager.first_name %> <%= cp.manager.last_name %></td>
+						<td><%= cp.department.name %></td>
+						<td><%= cp.deadline.strftime('%b %d %Y') %></td>
+						<td>
+							<% if cp.tasks %>
+								<% total = 0 %> <!-- variable that counts number of tasks associated with each project -->
+								<% complete = 0 %> <!-- variable that keeps track of completed tasks (of the total) -->
+								<% cp.tasks.each do |t| %>
+				        			<% total += 1 %> <!-- increments total count with each task -->
+				        			<% if t.complete %>
+				        				<% complete += 1 %> <!-- increment complete count -->
+							    	<% end %> <!-- ends if statement checking if task is complete -->
+								<% end %> <!-- ends looping through cp.tasks.each -->
+								<% if ((complete.to_f/total)*100).to_int < 100 %> <!-- if tasks aren't 100% completed, math performed to check for percentage completion -->
+									<%= ((complete.to_f/total)*100).to_int %>% Complete
+								<% else %> <!-- else if tasks are completed, marks the whole thing completed -->
+								Completed
+								<% end %> <!-- ends if/else statement checking for percent completion -->
+							<% else %> <!-- else if no tasks associated with project -->
+								No Tasks
+							<% end %> <!-- end looping through tasks that belong to project -->
+						</td>
+					</tr>
+				<% end %> <!-- end looping through each cp -->
+				</tbody>
+			</table>
+			<hr>
+			<% if @member_tasks.count > 0 %> <!-- check if there are any tasks for member to determine if tables should be loaded -->
+			<h2>Your Tasks</h2>
 
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th>Task</th>
-				<th>Project</th>
-				<th>Department</th>
-				<th>Deadline</th>
-				<th>Priority</th>
-				<th>Status</th>
-			</tr>
-		</thead>
-		<tbody>
-		<% @member_tasks.each do |mt| %>
-			<% if mt.project.deadline > DateTime.now %>
-			<tr>
-				<td><%= mt.name %></td>
-				<td><a href="/projects/<%= mt.project.id %>"><%= mt.project.name %></a></td>
-				<td><%= mt.department.name %> Department</td>
-				<td><%= mt.deadline.strftime('%b %d %Y') %></td>
-				<td><% if mt.priority === 1 %>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Task</th>
+						<th>Project</th>
+						<th>Department</th>
+						<th>Deadline</th>
+						<th>Priority</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+				<% @member_tasks.each do |mt| %>
+					<% if mt.project.deadline > DateTime.now %> <!-- Looks for member tasks for current projects (deadline is in the future) -->
+					<tr>
+						<td><%= mt.name %></td>
+						<td><a href="/projects/<%= mt.project.id %>"><%= mt.project.name %></a></td>
+						<td><%= mt.department.name %> Department</td>
+						<td><%= mt.deadline.strftime('%b %d %Y') %></td>
+						<td><% if mt.priority === 1 %> <!-- priority assigned with integers. 1 being high -->
 								High
-						<% elsif mt.priority === 2 %>
+							<% elsif mt.priority === 2 %> <!-- priority assigned with integers. 2 being medium -->
 								Medium
-						<% elsif mt.priority === 3 %>
+							<% elsif mt.priority === 3 %> <!-- priority assigned with integers. 3 being low -->
 								Low
-						<% else %>
+							<% else %> <!-- priority assigned with integers. this is if it didn't happen to have been assigned an integer -->
 								None
-						<% end %>
-				</td>
-				<td>
-					<% if mt.complete %>
-					Completed <%= mt.updated_at.strftime('%b %d %Y') %>
-					<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
-					 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-					 <input type="hidden" name="_method" value="patch">
-					 <input type="hidden" name="task[complete]" value="false">
-					 <input type="submit" value="Mark Incomplete" class="btn btn-default">
-					</form>
-					<% else %>
-					<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
-					 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-					 <input type="hidden" name="_method" value="patch">
-					 <input type="hidden" name="task[complete]" value="true">
-					 <input type="submit" value="Complete" class="btn btn-default">
-					</form>
-					<% end %>
-				</td>
-			</tr>
-			<% end %>
+							<% end %>
+						</td>
+						<td>
+							<% if mt.complete %> <!-- if marked completed, allow member to mark it incomplete -->
+							Completed <%= mt.updated_at.strftime('%b %d %Y') %>
+							<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
+							 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+							 <input type="hidden" name="_method" value="patch">
+							 <input type="hidden" name="task[complete]" value="false">
+							 <input type="submit" value="Mark Incomplete" class="btn btn-default">
+							</form>
+							<% else %> <!-- else if task is not completed, allow member to mark it complete -->
+							<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
+							 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+							 <input type="hidden" name="_method" value="patch">
+							 <input type="hidden" name="task[complete]" value="true">
+							 <input type="submit" value="Complete" class="btn btn-default">
+							</form>
+							<% end %> <!-- end if statement regarding task completion -->
+						</td>
+					</tr>
+					<% end %> <!-- end if statement looking for current projects -->
+				<% end %> <!-- end looping through each member_tasks -->
+				</tbody>
+			</table>
+			<% end %> <!-- ends if statement checking if member has existing tasks -->
 		<% end %>
-		</tbody>
-	</table>
-	<% end %>
-<% end %>
-<% end %>
-<% end %>
+		<% end %>
+	<% end %> <!-- End if/else statement checking if table should be rendered for a PM or a team member -->
+
 <!-- PAST DUE PROJECTS -->
 
-<% if @projects.where(['deadline < ?', DateTime.now]).any? %>
-<h2>Past Projects</h2>
-<% if @manager %>
+	<% if @projects.where(['deadline < ?', DateTime.now]).any? %>
+	<h2>Past Projects</h2>
+	<% if @manager %>
+		<!-- this version loads for managers -->
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Deadline</th>
+					<th>Priority</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
 
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Deadline</th>
-				<th>Priority</th>
-				<th>Status</th>
-			</tr>
-		</thead>
-		<tbody>
-
-		<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
-			<tr>
-				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
-				<td><%= p.description %></td>
-				<td><%= p.deadline.strftime('%b %d %Y') %></td>
-				<td><% if p.priority === 1 %>
-					  High
-					<% elsif p.priority === 2 %>
-					  Medium
-					<% elsif p.priority === 3 %>
-					  Low
-					<% else %>
-					  None
-					<% end %>
-  				</td>
-				<td>
-					<% if @tasks.find_by(project_id: p.id) %>
-						<% total = 0 %>
-						<% complete = 0 %>
-						<% p.tasks.each do |t| %>
-		        			<% total += 1 %>
-		        			<% if t.complete %>
-		        				<% complete += 1 %>
-				    		<% end %>
+			<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
+				<tr>
+					<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
+					<td><%= p.description %></td>
+					<td><%= p.deadline.strftime('%b %d %Y') %></td>
+					<td><% if p.priority === 1 %> <!-- priority assigned with integers. 1 being high -->
+					  	  High
+						<% elsif p.priority === 2 %> <!-- priority assigned with integers. 2 being medium -->
+						  Medium
+						<% elsif p.priority === 3 %> <!-- priority assigned with integers. 3 being low -->
+					  	  Low
+						<% else %> <!-- priority assigned with integers. this is if it didn't happen to have been assigned an integer -->
+					  	  None
 						<% end %>
-						<% if ((complete.to_f/total)*100).to_int < 100 %>
-							<%= ((complete.to_f/total)*100).to_int %>% Complete
-						<% else %>
-						Completed
-						<% end %>
-					<% else %>
-						No Tasks
-					<% end %>
-				</td>
-			</tr>
-		<% end %>
-		</tbody>
-	</table>
-	<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
+	  				</td>
+					<td>
+						<% if p.tasks %>
+							<% total = 0 %> <!-- variable that counts number of tasks associated with each project -->
+							<% complete = 0 %> <!-- variable that keeps track of completed tasks (of the total) -->
+							<% p.tasks.each do |t| %>
+				        		<% total += 1 %> <!-- increments total count with each task -->
+				        		<% if t.complete %>
+				       				<% complete += 1 %> <!-- increment complete count -->
+						    	<% end %> <!-- ends if statement checking if task is complete -->
+							<% end %> <!-- ends looping through cp.tasks.each -->
+							<% if ((complete.to_f/total)*100).to_int < 100 %> <!-- if tasks aren't 100% completed, math performed to check for percentage completion -->
+								<%= ((complete.to_f/total)*100).to_int %>% Complete
+							<% else %> <!-- else if tasks are completed, marks the whole thing completed -->
+							Completed
+							<% end %> <!-- ends if/else statement checking for percent completion -->
+						<% else %> <!-- else if no tasks associated with project -->
+							No Tasks
+						<% end %> <!-- end looping through tasks that belong to project -->
+					</td>
+				</tr>
+			<% end %> <!-- end looping through each project with deadlines in the past-->
+			</tbody>
+		</table>
+		<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
 
-<% else %>
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Manager</th>
-				<th>Department</th>
-				<th>Project Deadline</th>
-				<th>Status</th>
-			</tr>
-		</thead>
-		<tbody>
-		<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
-			<tr>
-				<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
-				<td><%= p.description %></td>
-				<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
-				<td><%= p.deadline.strftime('%b %d %Y') %></td>
-				<td><%= p.department.name %></td>
-				<td>
-					<% if p.tasks %>
-						<% total = 0 %>
-						<% complete = 0 %>
-						<% p.tasks.each do |t| %>
-		        	<% total += 1 %>
-			        	<% if t.complete %>
-			        		<% complete += 1 %>
-					    <% end %>
-					<% end %>
-						<% if ((complete.to_f/total)*100).to_int < 100 %>
-							<%= ((complete.to_f/total)*100).to_int %>% Complete
-						<% else %>
-						Complete
-						<% end %>
-					<% else %>
-						No Tasks
-					<% end %>
-				</td>
-			</tr>
-		<% end %>
-		</tbody>
-	</table>
-<hr>
+	<% else %> <!-- Else if not a manager, load different table for member -->
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Manager</th>
+					<th>Department</th>
+					<th>Project Deadline</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+			<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
+				<tr>
+					<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
+					<td><%= p.description %></td>
+					<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
+					<td><%= p.deadline.strftime('%b %d %Y') %></td>
+					<td><%= p.department.name %></td>
+					<td>
+						<% if p.tasks %>
+							<% total = 0 %> <!-- variable that counts number of tasks associated with each project -->
+							<% complete = 0 %> <!-- variable that keeps track of completed tasks (of the total) -->
+							<% p.tasks.each do |t| %>
+			        			<% total += 1 %> <!-- increments total count with each task -->
+					        	<% if t.complete %>
+					        		<% complete += 1 %> <!-- increments complete count -->
+							    <% end %> <!-- ends if statement checking if task is complete -->
+							<% end %> <!-- ends looping through p.tasks.each -->
+							<% if ((complete.to_f/total)*100).to_int < 100 %> <!-- if tasks aren't 100% completed, math performed to check for percentage completion -->
+								<%= ((complete.to_f/total)*100).to_int %>% Complete
+							<% else %> <!-- else if tasks are completed, mark the whole thing completed -->
+							Completed
+							<% end %> <!-- end if/else statement checking for percent completion -->
+						<% else %> <!-- else if no p.tasks -->
+							No Tasks
+						<% end %> <!-- End of checking if there are tasks -->
+					</td>
+				</tr>
+			<% end %> <!-- End looping through past projects -->
+			</tbody>
+		</table>
+	<hr>
+	<% end %> <!-- End if manager / team member to determine past projects view -->
+	<% end %> <!-- End check for past projects (with deadlines in the past) -->
 
-<% end %>
-<% end %>
-
-<% else %>
+<!-- IF THERE ARE NO PROJECTS, TABLES DO NOT SHOW. OPTION TO START PROJECT GIVEN TO MANAGER -->
+<% else %> <!-- else for checking if there are any projects -->
 	<div class="col-md-12"><h3>You don't have any projects at this time.</h3></div>
 	<% if current_user.manager %>
 		<div class="col-md-2"><a href="/projects/new" class="btn btn-default">Start a New Project</a></div>
 	<% end %>
-
-<% end %>
+<% end %> <!-- end for checking if there are any projects -->

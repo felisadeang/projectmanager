@@ -4,7 +4,7 @@
   background-repeat:no-repeat;
   background-size:cover;
   background-position:center;
-  height: 100vh;
+  height: 100%;
   text-align: center;
 }
 h2 {
@@ -14,7 +14,7 @@ h2 {
   padding-top: 45%;
 }
 #holder {
-  margin-top: 10%;
+  margin: 10% 0 20% 0;
   background-color: white;
   padding: 10px 20px 10px 20px;
 }
@@ -31,10 +31,11 @@ h2 {
 }
 
 </style>
+
 <div id="newuser">
   <div class="container">
     <div class="row" id="logorow">
-      <a class="imglogo" href="/"><%= image_tag "cahoots_logo_white.png" %></a>
+      <a class="imglogo" href="/"><%= image_tag "cahoots_logo_secondary.png" %></a>
     </div>
   <div class="row">
     <div class="col-xs-5 col-md-4"></div>
@@ -48,12 +49,10 @@ h2 {
       <form action="/users" method="post" class="form-horizontal">
         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
         <div class="form-group">
-        <div class="col-sm-12">
+        <div class="col-sm-6 col-md-6">
         <input type="text" name="user[first_name]" class="form-control" placeholder="First Name">
         </div>
-        </div>
-        <div class="form-group">
-        <div class="col-sm-12">
+        <div class="col-sm-6 col-md-6">
         <input type="text" name="user[last_name]" class="form-control" placeholder="Last Name">
         </div>
         </div>
@@ -89,8 +88,6 @@ h2 {
         <label class='checkbox-inline'> Project Manager?</label>
         <label class='checkbox-inline'>
         <input type='checkbox' name='user[manager]' value='true'/> Yes</label>
-          
-      
         </div>
         </div>
         <div class="form-group">
@@ -99,7 +96,7 @@ h2 {
         </div>
         </div>
       </form>
-      <p>Already a member? <a href="/login">Log in here.</a></p>
+      <p>Already a member? <a href="/login">Log In here.</a></p>
     </div>
   </div>
   <div class="col-xs-5 col-md-4"></div>

@@ -1,0 +1,27 @@
+#newsessions {
+  background-image:url('/assets/background.png');
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+  height: 100vh;
+  text-align: center;
+}
+.imglogo2 {
+  padding-top: 25%
+}
+#logorow {
+  padding-top: 50px;
+}
+.logindiv {
+  background-color: white;
+  margin-top: 20%;
+  padding: 0px 20px 10px 20px;
+}
+.logbutton {
+  padding: 10px 103px 10px 103px;
+  border-radius: 5px;
+  border: 0;
+  background-color: #81CD95;
+  color: white;
+  letter-spacing: 2px;
+}
