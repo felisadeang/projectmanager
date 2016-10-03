@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="./assets/stylesheets/usersshow.css">
 <!-- DETERMINE IF PROJECTS EXIST (EITHER IN PM CAPACITY OR AS TEAM MEMBER) OR NOT -->
 <% if @projects.any? %> <!-- check if there are any projects to determine if tables should be loaded -->
 	<% if @projects.where(['deadline > ?', DateTime.now]).any? %> <!-- checks if table for current projects should be loaded -->
@@ -265,7 +266,6 @@
 	<hr>
 	<% end %> <!-- End if manager / team member to determine past projects view -->
 	<% end %> <!-- End check for past projects (with deadlines in the past) -->
-
 <!-- IF THERE ARE NO PROJECTS, TABLES DO NOT SHOW. OPTION TO START PROJECT GIVEN TO MANAGER -->
 <% else %> <!-- else for checking if there are any projects -->
 	<div class="col-md-12"><h3>You don't have any projects at this time.</h3></div>

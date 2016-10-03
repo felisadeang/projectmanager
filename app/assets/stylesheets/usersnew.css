@@ -1,0 +1,30 @@
+#newuser {
+  background-image:url('/assets/background.png');
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+  height: 100%;
+  text-align: center;
+}
+h2 {
+  letter-spacing: 1px;
+}
+.imglogo {
+  padding-top: 45%;
+}
+#holder {
+  margin: 10% 0 20% 0;
+  background-color: white;
+  padding: 10px 20px 10px 20px;
+}
+#regbutton {
+  padding: 10px 110px 10px 110px;
+  border-radius: 5px;
+  border: 0;
+  background-color: #81CD95;
+  color: white;
+  letter-spacing: 2px;
+}
+#logorow {
+  padding-top: 50px;
+}

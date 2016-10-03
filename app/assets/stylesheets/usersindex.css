@@ -1,0 +1,47 @@
+#bottom {
+  background-image:url('/assets/background.png');
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center;
+  padding-bottom: 20%;
+  height: 100vh;
+}
+.logo {
+  padding: 10% 0% 0% 28%;
+}
+.join {
+  padding: 5% 0% 0% 40%;
+}
+#top {
+  margin-top: 1%;
+  margin-bottom: 3%;
+  display: block;
+}
+#topleft {
+  display: inline-block;
+  padding: 2% 55% 0% 4%;
+}
+#topright {
+  display: inline-block;
+  vertical-align: top;
+  padding: 2% 0% 0% 2%;
+}
+.button {
+  border-radius: .25em;
+  padding: .5em 3em .5em 3em;
+  /*border: 1px solid gray;*/
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+}
+p {
+  font-size: 1.12em;
+  color: #B3B0BD;
+  letter-spacing: 1px;
+}
+a:link, a:visited {
+    color: #B3B0BD;
+    text-decoration: none;
+    cursor: auto;
+}
+.join img:hover {
+  opacity: 0.5;
+}
