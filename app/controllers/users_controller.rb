@@ -13,10 +13,12 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		@manager = false
 		@tasks = Task.all
-		if Project.find_by(user_id: params[:id])
+
+		if @user.manager
 			@manager = true
 			@projects = User.find(params[:id]).projects.order("priority, deadline")
 		else
+			@manager = false
 			@member_tasks = Task.where(member: @user).order("priority, deadline")
 			@projects = User.find(params[:id]).projects_assigned.order("priority, deadline")
 		end
