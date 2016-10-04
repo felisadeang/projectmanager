@@ -55,7 +55,7 @@ class UsersController < ApplicationController
 
 	def update
 		@user = User.find(params[:id])
-		@user.update(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], department: Department.find(params[:department]))
+		@user.update(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], department: Department.find(params[:department]), manager: params[:manager])
 			if @user.errors.empty?
 				redirect_to user_path(@user.id)
 			else

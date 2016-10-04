@@ -41,6 +41,24 @@
         </div>
         <div class="form-group">
         <div class="col-sm-12">
+          <select name='manager' class='form-control'>
+            <option selected='select' value='<%= @user.manager %>'>
+            <% if @user.manager %>
+              Yes
+            <% else %>
+              No
+            <% end %>  
+            </option>
+            <% if @user.manager %>
+              <option value="false">No</option>
+            <% else %>
+              <option value="true">Yes</option>
+            <% end %>
+          </select>
+        </div>
+        </div>
+        <div class="form-group">
+        <div class="col-sm-12">
         <input class="btn btn-secondary btn-lg btn-block" type="submit" value="Update">
         </div>
         </div>
