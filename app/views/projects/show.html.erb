@@ -1,12 +1,12 @@
 
  <% if @manager %>
 
- <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title" style="font-size: 1.7em;"><%= @project.name %></h3>
+ <div class='panel panel-default'>
+  <div class='panel-heading'>
+    <h3 class='panel-title' style='font-size: 1.7em;'><%= @project.name %></h3>
   </div>
-  <div class="panel-body">
-    <table class="table">
+  <div class='panel-body'>
+    <table class='table'>
       <tbody>
         <tr>
           <td>Description</td>
@@ -53,7 +53,7 @@
     <% if @project.tasks.count > 0 %>
       <% if @project.tasks.exists?(complete: true)%>
       <h4>Pending Tasks</h4>
-      <table class="table table-bordered">
+      <table class='table table-bordered'>
         <thead>
           <tr>
             <th>Task</th>
@@ -72,7 +72,7 @@
               <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
                 <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
                 <input type='hidden' name='_method' value='delete'>
-                <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+                <input type='submit' class='btn btn-default' value='Delete' class='delete-btn'/>
               </form>
             </td>
           </tr>
@@ -80,7 +80,7 @@
         </tbody>
       </table>
       <h4>Completed Tasks</h4>
-        <table class="table table-bordered">
+        <table class='table table-bordered'>
           <thead>
             <tr>
               <th>Task</th>
@@ -103,7 +103,7 @@
                 <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
 					         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
 					         <input type='hidden' name='_method' value='delete'>
-					         <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+					         <input type='submit' class='btn btn-default' value='Delete' class='delete-btn'/>
                 </form>
               </td>
             </tr>
@@ -112,7 +112,7 @@
         </table>
         <% else %>
         <h4>Pending Tasks</h4>
-          <table class="table table-bordered">
+          <table class='table table-bordered'>
             <thead>
               <tr>
                 <th>Task</th>
@@ -131,7 +131,7 @@
                   <form action='/tasks/<%= t.id %>' method='post' class='delete_task_form'>
                     <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
                     <input type='hidden' name='_method' value='delete'>
-                    <input type='submit' class="btn btn-default" value='Delete' class='delete-btn'/>
+                    <input type='submit' class='btn btn-default' value='Delete' class='delete-btn'/>
                   </form>
                 </td>
               </tr>
@@ -147,21 +147,21 @@
     <hr>
 
 
-    <a href="<%= @project.id %>/edit">Edit Project</a> | <a href="<%= @project.id%>/edit">Add Tasks</a>
+    <a href='<%= @project.id %>/edit'>Edit Project</a> | <a href='<%= @project.id%>/edit'>Add Tasks</a>
     <hr>
-    <a href="/projects/<%= @project.id %>" data-method="delete">Delete Project</a>
+    <a href='/projects/<%= @project.id %>' data-method='delete'>Delete Project</a>
    </div>
 
   </div>
 
  <% else %>
 
- <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title" style="font-size: 1.7em;"><%= @project.name %></h3>
+ <div class='panel panel-default'>
+  <div class='panel-heading'>
+    <h3 class='panel-title' style='font-size: 1.7em;'><%= @project.name %></h3>
   </div>
-  <div class="panel-body">
-    <table class="table">
+  <div class='panel-body'>
+    <table class='table'>
       <tbody>
         <tr>
           <td>Description</td>
@@ -220,7 +220,7 @@
               <b>You have no tasks.</b>
           <% end %>
           <h4>Your tasks for this project</h4>
-          <table class="table table-bordered">
+          <table class='table table-bordered'>
             <thead>
         			<tr>
         				<th>Task</th>
@@ -236,18 +236,18 @@
                 <td>
                   <% if t.complete %>
                   Completed <%= t.updated_at.strftime('%b %d %Y') %>
-                  <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
-                   <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"/>
-                   <input type="hidden" name="_method" value="patch"/>
-                   <input type="hidden" name="task[complete]" value="false"/>
-                   <input type="submit" value="Mark Incomplete" class="btn btn-default"/>
+                  <form action='/tasks/<%= t.id %>' method='post' style='display: inline;'>
+                   <input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'/>
+                   <input type='hidden' name='_method' value='patch'/>
+                   <input type='hidden' name='task[complete]' value='false'/>
+                   <input type='submit' value='Mark Incomplete' class='btn btn-default'/>
                   </form>
                   <% else %>
-                  <form action='/tasks/<%= t.id %>' method='post' style="display: inline;">
-                   <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden"/>
-                   <input type="hidden" name="_method" value="patch"/>
-                   <input type="hidden" name="task[complete]" value="true"/>
-                   <input type="submit" value="Mark Complete" class="btn btn-default"/>
+                  <form action='/tasks/<%= t.id %>' method='post' style='display: inline;'>
+                   <input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'/>
+                   <input type='hidden' name='_method' value='patch'/>
+                   <input type='hidden' name='task[complete]' value='true'/>
+                   <input type='submit' value='Mark Complete' class='btn btn-default'/>
                   </form>
                   <% end %>
                 </td>
@@ -256,7 +256,7 @@
             </tbody>
           </table>
           <h4>Other tasks associated with this project</h4>
-              <table class="table table-bordered">
+              <table class='table table-bordered'>
                 <thead>
             			<tr>
             				<th>Task</th>

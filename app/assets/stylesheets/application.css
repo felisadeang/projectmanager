@@ -13,3 +13,10 @@
  *= require_tree .
  *= require_self
  */
+#homenav{
+	padding-top: 10px;
+}
+.bodyoffile {
+	padding-top: 50px;
+	padding-bottom: 50px;
+}

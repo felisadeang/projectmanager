@@ -1,37 +1,37 @@
-<link rel="stylesheet" href="./assets/stylesheets/sessionsnew.css">
-<div id="newsessions">
-<div class="container">
-  <div class="row">
-    <div class="col-xs-5 col-md-4"></div>
-    <div class="col-xs-8 col-md-4">
-      <p class="imglogo2"><a href="/"><%= image_tag "cahoots_logo_secondary.png" %></a></p>
+<link rel='stylesheet' href='./assets/stylesheets/sessionsnew.css'>
+<div id='newsessions'>
+<div class='container'>
+  <div class='row'>
+    <div class='col-xs-5 col-md-4'></div>
+    <div class='col-xs-8 col-md-4'>
+      <p class='imglogo2'><a href='/'><%= image_tag 'cahoots_logo_secondary.png' %></a></p>
       <% if flash[:errors] %>
-      <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
+      <div class='alert alert-danger' role='alert'> <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
       <% end %>
-      <div class="logindiv">
+      <div class='logindiv'>
       <h2><small>Log In</small></h2>
-      <form action="/sessions" method="post" class="form-horizontal">
+      <form action='/sessions' method='post' class='form-horizontal'>
         <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
-        <div class="form-group">
-        <div class="col-sm-12">
-        <input type="text" name="user[email]" class="form-control" placeholder="Email">
+        <div class='form-group'>
+        <div class='col-sm-12'>
+        <input type='text' name='user[email]' class='form-control' placeholder='Email'>
         </div>
         </div>
-        <div class="form-group">
-        <div class="col-sm-12">
-        <input type="password" name="user[password]" class="form-control" placeholder="Password">
+        <div class='form-group'>
+        <div class='col-sm-12'>
+        <input type='password' name='user[password]' class='form-control' placeholder='Password'>
         </div>
         </div>
-        <div class="form-group">
-        <div class="col-sm-12">
-        <input class="logbutton" type="submit" value="Log In">
+        <div class='form-group'>
+        <div class='col-sm-12'>
+        <input class='logbutton' type='submit' value='Log In'>
         </div>
         </div>
       </form>
-      <p>Need an account? <a href="/users/new">Join here.</a></p>
+      <p>Need an account? <a href='/users/new'>Join here.</a></p>
       </div>
       </div>
-  <div class="col-xs-5 col-md-4"></div>
+  <div class='col-xs-5 col-md-4'></div>
   </div>
 </div>
 </div>

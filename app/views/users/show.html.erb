@@ -1,11 +1,14 @@
-<link rel="stylesheet" href="./assets/stylesheets/usersshow.css">
+<link rel='stylesheet' href='./assets/stylesheets/usersshow.css'>
+<div class='container'>
+<div class='row'>
+<div class='bodyoffile'>
 <!-- DETERMINE IF PROJECTS EXIST (EITHER IN PM CAPACITY OR AS TEAM MEMBER) OR NOT -->
 <% if @projects.any? %> <!-- check if there are any projects to determine if tables should be loaded -->
 	<% if @projects.where(['deadline > ?', DateTime.now]).any? %> <!-- checks if table for current projects should be loaded -->
 	<h2>Current Projects</h2>
 	<% if @manager %>
 		<!-- this version of the current projects table loads for project managers -->
-		<table class="table table-bordered">
+		<table class='table table-bordered'>
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -18,7 +21,7 @@
 		<tbody>
 			<% @projects.where(['deadline > ?', DateTime.now]).each do |cp| %> <!-- cp for current projects -->
 			<tr>
-				<td><a href="/projects/<%= cp.id %>"><%= cp.name %></a></td>
+				<td><a href='/projects/<%= cp.id %>'><%= cp.name %></a></td>
 				<td><%= cp.description %></td>
 				<td><%= cp.deadline.strftime('%b %d %Y') %></td>
 				<td><% if cp.priority === 1 %> <!-- priority assigned with integers. 1 being high -->
@@ -53,13 +56,13 @@
 			<% end %> <!-- end looping through projects with deadline in the future for managers -->
 			</tbody>
 		</table>
-		<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
+		<div class='col-md-2 col-md-offset-10'><a href='/projects/new' class='btn btn-default'>Add Project</a></div>
 		<!-- end of current projects view for project managers -->
 
 	<!-- ELSE IF NOT PROJECT MANAGER -->
 	<% else %> 
 		<% if @projects.where(['deadline > ?', DateTime.now]) %> <!-- checks if table for current projects should be loaded -->
-			<table class="table table-bordered">
+			<table class='table table-bordered'>
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -73,7 +76,7 @@
 				<tbody>
 				<% @projects.where(['deadline > ?', DateTime.now]).each do |cp| %> <!-- cp for current projects -->
 					<tr>
-						<td><a href="/projects/<%= cp.id %>"><%= cp.name %></a></td>
+						<td><a href='/projects/<%= cp.id %>'><%= cp.name %></a></td>
 						<td><%= cp.description %></td>
 						<td><%= cp.manager.first_name %> <%= cp.manager.last_name %></td>
 						<td><%= cp.department.name %></td>
@@ -105,7 +108,7 @@
 			<% if @member_tasks.count > 0 %> <!-- check if there are any tasks for member to determine if tables should be loaded -->
 			<h2>Your Tasks</h2>
 
-			<table class="table table-bordered">
+			<table class='table table-bordered'>
 				<thead>
 					<tr>
 						<th>Task</th>
@@ -121,7 +124,7 @@
 					<% if mt.project.deadline > DateTime.now %> <!-- Looks for member tasks for current projects (deadline is in the future) -->
 					<tr>
 						<td><%= mt.name %></td>
-						<td><a href="/projects/<%= mt.project.id %>"><%= mt.project.name %></a></td>
+						<td><a href='/projects/<%= mt.project.id %>'><%= mt.project.name %></a></td>
 						<td><%= mt.department.name %> Department</td>
 						<td><%= mt.deadline.strftime('%b %d %Y') %></td>
 						<td><% if mt.priority === 1 %> <!-- priority assigned with integers. 1 being high -->
@@ -137,18 +140,18 @@
 						<td>
 							<% if mt.complete %> <!-- if marked completed, allow member to mark it incomplete -->
 							Completed <%= mt.updated_at.strftime('%b %d %Y') %>
-							<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
-							 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-							 <input type="hidden" name="_method" value="patch">
-							 <input type="hidden" name="task[complete]" value="false">
-							 <input type="submit" value="Mark Incomplete" class="btn btn-default">
+							<form action='/tasks/<%= mt.id %>' method='post' style='display: inline;'>
+							 <input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'>
+							 <input type='hidden' name='_method' value='patch'>
+							 <input type='hidden' name='task[complete]' value='false'>
+							 <input type='submit' value='Mark Incomplete' class='btn btn-default'>
 							</form>
 							<% else %> <!-- else if task is not completed, allow member to mark it complete -->
-							<form action='/tasks/<%= mt.id %>' method='post' style="display: inline;">
-							 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-							 <input type="hidden" name="_method" value="patch">
-							 <input type="hidden" name="task[complete]" value="true">
-							 <input type="submit" value="Complete" class="btn btn-default">
+							<form action='/tasks/<%= mt.id %>' method='post' style='display: inline;'>
+							 <input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'>
+							 <input type='hidden' name='_method' value='patch'>
+							 <input type='hidden' name='task[complete]' value='true'>
+							 <input type='submit' value='Complete' class='btn btn-default'>
 							</form>
 							<% end %> <!-- end if statement regarding task completion -->
 						</td>
@@ -168,7 +171,7 @@
 	<h2>Past Projects</h2>
 	<% if @manager %>
 		<!-- this version loads for managers -->
-		<table class="table table-bordered">
+		<table class='table table-bordered'>
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -182,7 +185,7 @@
 
 			<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
 				<tr>
-					<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
+					<td><a href='/projects/<%= p.id %>'><%= p.name %></a></td>
 					<td><%= p.description %></td>
 					<td><%= p.deadline.strftime('%b %d %Y') %></td>
 					<td><% if p.priority === 1 %> <!-- priority assigned with integers. 1 being high -->
@@ -218,10 +221,10 @@
 			<% end %> <!-- end looping through each project with deadlines in the past-->
 			</tbody>
 		</table>
-		<div class="col-md-2 col-md-offset-10"><a href="/projects/new" class="btn btn-default">Add Project</a></div>
+		<div class='col-md-2 col-md-offset-10'><a href='/projects/new' class='btn btn-default'>Add Project</a></div>
 
 	<% else %> <!-- Else if not a manager, load different table for member -->
-		<table class="table table-bordered">
+		<table class='table table-bordered'>
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -235,7 +238,7 @@
 			<tbody>
 			<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
 				<tr>
-					<td><a href="/projects/<%= p.id %>"><%= p.name %></a></td>
+					<td><a href='/projects/<%= p.id %>'><%= p.name %></a></td>
 					<td><%= p.description %></td>
 					<td><%= p.manager.first_name %> <%= p.manager.last_name %></td>
 					<td><%= p.deadline.strftime('%b %d %Y') %></td>
@@ -268,8 +271,11 @@
 	<% end %> <!-- End check for past projects (with deadlines in the past) -->
 <!-- IF THERE ARE NO PROJECTS, TABLES DO NOT SHOW. OPTION TO START PROJECT GIVEN TO MANAGER -->
 <% else %> <!-- else for checking if there are any projects -->
-	<div class="col-md-12"><h3>You don't have any projects at this time.</h3></div>
+	<div class='col-md-12'><h3>You don't have any projects at this time.</h3></div>
 	<% if current_user.manager %>
-		<div class="col-md-2"><a href="/projects/new" class="btn btn-default">Start a New Project</a></div>
+		<div class='col-md-2'><a href='/projects/new' class='btn btn-default'>Start a New Project</a></div>
 	<% end %>
 <% end %> <!-- end for checking if there are any projects -->
+</div>
+</div>
+</div>

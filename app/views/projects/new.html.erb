@@ -1,33 +1,33 @@
-<div class="container-fluid">
+<div class='container-fluid'>
+<div class='bodyoffile'>
 
-
-    <div class="col-md-1"></div>
-    <div class="col-md-6">
+    <div class='col-md-1'></div>
+    <div class='col-md-6'>
         <% if flash[:errors] %>
-            <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
+            <div class='alert alert-danger' role='alert'> <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
         <% end %>
 
         <h3>New Project</h3>
         <form action='/projects' method='post'>
-          <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-          <input type="hidden" name="project[user_id]" value="<%= @user.id =%>">
-          <input type="hidden" name="project[department_id]" value="<%= @user.department.id =%>">
-          <div class="form-group">
-          <label class="col-sm-4 control-label">Name</label>
-          <div class="col-sm-8">
-          <input type="text" name="project[name]" class="form-control">
+          <input name='authenticity_token' value='<%= form_authenticity_token %>' type='hidden'>
+          <input type='hidden' name='project[user_id]' value='<%= @user.id =%>'>
+          <input type='hidden' name='project[department_id]' value='<%= @user.department.id =%>'>
+          <div class='form-group'>
+          <label class='col-sm-4 control-label'>Name</label>
+          <div class='col-sm-8'>
+          <input type='text' name='project[name]' class='form-control'>
           </div>
           </div>
-          <div class="form-group">
-          <label class="col-sm-4 control-label">Description</label>
-          <div class="col-sm-8">
-          <input type="text" name="project[description]" class="form-control">
+          <div class='form-group'>
+          <label class='col-sm-4 control-label'>Description</label>
+          <div class='col-sm-8'>
+          <input type='text' name='project[description]' class='form-control'>
           </div>
           </div>
-          <div class="form-group">
-          <label class="col-sm-4 control-label">Priority</label>
-          <div class="col-sm-8">
-              <select name="project[priority]" class="form-control">
+          <div class='form-group'>
+          <label class='col-sm-4 control-label'>Priority</label>
+          <div class='col-sm-8'>
+              <select name='project[priority]' class='form-control'>
                   <option selected='select' disabled='disabled'>--</option>
                   <option name='high' value='1'>High</option>
                   <option name='med' value='2'>Medium</option>
@@ -35,35 +35,36 @@
               </select>
           </div>
           </div>
-          <div class="form-group">
-          <label class="col-sm-4 control-label">Deadline</label>
-          <div class="col-sm-8">
+          <div class='form-group'>
+          <label class='col-sm-4 control-label'>Deadline</label>
+          <div class='col-sm-8'>
           <input type='date' name='project[deadline]' class='form-control' value='<%= @tomorrow %>'/>
           <%= @tom %>
           </div>
           </div>
-          <div class="form-group">
-          <div class="col-sm-4"></div>
-          <div class="col-sm-8">
-          <input class="btn btn-default" type="submit" value="Submit">
+          <div class='form-group'>
+          <div class='col-sm-4'></div>
+          <div class='col-sm-8'>
+          <input class='btn btn-default' type='submit' value='Submit'>
           </div>
           </div>
         </form>
 
 
     </div>
-    <div class="col-md-1"></div>
-    <div class="col-md-3">
+    <div class='col-md-1'></div>
+    <div class='col-md-3'>
         <h3>Your existing projects</h3>
         <% if @projects.count > 0 %>
         <ul>
             <% @projects.each do |p| %>
-            <li><a href="/projects/<%= p.id %>"><%= p.name %></a></li>
+            <li><a href='/projects/<%= p.id %>'><%= p.name %></a></li>
             <% end %>
         </ul>
         <% else %>
             You have not yet started a project.
         <% end %>
     </div>
-    <div class="col-md-1"></div>
+    <div class='col-md-1'></div>
+</div>
 </div>
