@@ -65,7 +65,7 @@
 		<% if @projects.where(['deadline > ?', DateTime.now]) %> <!-- checks if table for current projects should be loaded --> 
 		
 			<% if @member_tasks.count > 0 %> <!-- check if there are any tasks for member to determine if tables should be loaded -->
-			<h2>Your Tasks</h2>
+			<h2>Your Tasks on Current Projects</h2>
 
 			<table class='table table-bordered'>
 				<thead>
@@ -80,7 +80,7 @@
 				</thead>
 				<tbody>
 				<% @member_tasks.each do |mt| %>
-					<% if mt.project.deadline > DateTime.now && mt.complete == false %> <!-- Looks for member tasks for current projects (deadline is in the future) -->
+					<% if mt.project.deadline > DateTime.now %> <!-- Looks for member tasks for current projects (deadline is in the future) -->
 					<tr>
 						<td><%= mt.name %></td>
 						<td><a href='/projects/<%= mt.project.id %>'><%= mt.project.name %></a></td>

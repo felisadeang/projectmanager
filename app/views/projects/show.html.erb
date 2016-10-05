@@ -48,6 +48,10 @@
             <% end %>
           </td>
         </tr>
+        <tr>
+        <td>Action</td>
+        <td><a href='<%= @project.id %>/edit'>Edit Project</a></td>
+        </tr>
       </tbody>
     </table>
     <% if @project.tasks.count > 0 %>
@@ -149,9 +153,9 @@
     <hr>
 
 
-    <a href='<%= @project.id %>/edit'>Edit Project</a> | <a href='<%= @project.id%>/edit#addtask'>Add Tasks</a>
+    <a href='<%= @project.id%>/edit#addtask' class='btn btn-default'>Add Tasks</a>
     <hr>
-    <a href='/projects/<%= @project.id %>' data-method='delete'>Delete Project</a>
+    <a href='/projects/<%= @project.id %>' class='btn btn-default' data-method='delete'>Delete Project</a>
    </div>
 
   </div>
@@ -262,6 +266,7 @@
             <% end %>
             </tbody>
           </table>
+          <% if @tasks.where.not(member: current_user) %>
           <h4>Other tasks associated with this project</h4>
               <table class='table table-bordered'>
                 <thead>
@@ -280,6 +285,7 @@
                   </tr>
                   <% end %>
               </table>
+        <% end %>
         <% end %>
    </div>
   </div>
