@@ -74,6 +74,7 @@
                 <input type='hidden' name='_method' value='delete'>
                 <input type='submit' class='btn btn-default' value='Delete' class='delete-btn'/>
               </form>
+             <a href='/tasks/<%= t.id %>/edit' class='btn btn-default'>Edit</a>
             </td>
           </tr>
           <% end %>
@@ -147,7 +148,7 @@
     <hr>
 
 
-    <a href='<%= @project.id %>/edit'>Edit Project</a> | <a href='<%= @project.id%>/edit'>Add Tasks</a>
+    <a href='<%= @project.id %>/edit'>Edit Project</a> | <a href='<%= @project.id%>/edit#addtask'>Add Tasks</a>
     <hr>
     <a href='/projects/<%= @project.id %>' data-method='delete'>Delete Project</a>
    </div>
