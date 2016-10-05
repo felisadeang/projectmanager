@@ -17,10 +17,30 @@ class UsersController < ApplicationController
 		if @user.manager
 			@manager = true
 			@projects = User.find(params[:id]).projects.order("priority, deadline")
+			@pastprojects = @projects.where(['deadline < ?', DateTime.now])
 		else
 			@manager = false
-			@member_tasks = Task.where(member: @user).order("priority, deadline")
 			@projects = User.find(params[:id]).projects_assigned.order("priority, deadline")
+			@member_tasks = Task.where(member: @user).order("priority, deadline")
+			@pastprojectsbydeadline = @projects.where(['deadline < ?', DateTime.now])
+		end
+	end
+
+	def past
+		@today = Time.now.strftime('%Y-%m-%d')
+		@user = User.find(params[:id])
+		@manager = false
+		@tasks = Task.all
+
+		if @user.manager
+			@manager = true
+			@projects = User.find(params[:id]).projects.order("priority, deadline")
+			@pastprojects = @projects.where(['deadline < ?', DateTime.now])
+		else
+			@manager = false
+			@projects = User.find(params[:id]).projects_assigned.order("priority, deadline")
+			@member_tasks = Task.where(member: @user).order("priority, deadline")
+			@pastprojectsbydeadline = @projects.where(['deadline < ?', DateTime.now])
 		end
 	end
 
