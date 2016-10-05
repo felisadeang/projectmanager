@@ -9,7 +9,7 @@
     <div class="col-xs-8 col-md-4">
 
       <% if flash[:errors] %>
-      <div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
+      <div class="alert alert-danger" role="alert" id="logomarg"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <% flash[:errors].each do |message| %> <%= message %>. <% end %></div>
       <% end %>
     <div id="holder">
       <h2><small>Register</small></h2>

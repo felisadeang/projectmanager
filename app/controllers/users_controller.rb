@@ -17,10 +17,26 @@ class UsersController < ApplicationController
 		if @user.manager
 			@manager = true
 			@projects = User.find(params[:id]).projects.order("priority, deadline")
+			@pastprojects = @projects.where(['deadline < ?', DateTime.now])
 		else
 			@manager = false
-			@member_tasks = Task.where(member: @user).order("priority, deadline")
 			@projects = User.find(params[:id]).projects_assigned.order("priority, deadline")
+			@member_tasks = Task.where(member: @user).order("priority, deadline")
+			@pastprojectsbydeadline = @projects.where(['deadline < ?', DateTime.now])
+			# totaltaskcount = 0
+			# totalcompletetask = 0
+			# @projects.each do |p|
+			# 	p.tasks.each do |t|
+			# 		if t.user_id == params[:id] && t.complete == true
+			# 			totalcompletetask += 1
+			# 		elsif t.user_id == param[:id]
+			# 			totaltaskcount += 1
+			# 		end
+			# 		if totalcompletetask.to_f / totaltaskcount.to_f == 100
+			# 			@pastprojectsbycomplete = p
+			# 		end
+			# 	end
+			# end
 		end
 	end
 

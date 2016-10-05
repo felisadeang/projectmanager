@@ -61,7 +61,7 @@
 
 	<!-- ELSE IF NOT PROJECT MANAGER -->
 	<% else %> 
-		<% if @projects.where(['deadline > ?', DateTime.now]) %> <!-- checks if table for current projects should be loaded -->
+		<% if @projects.where(['deadline > ?', DateTime.now]) %> <!-- checks if table for current projects should be loaded --> 
 			<table class='table table-bordered'>
 				<thead>
 					<tr>
@@ -121,7 +121,7 @@
 				</thead>
 				<tbody>
 				<% @member_tasks.each do |mt| %>
-					<% if mt.project.deadline > DateTime.now %> <!-- Looks for member tasks for current projects (deadline is in the future) -->
+					<% if mt.project.deadline > DateTime.now && mt.complete == false %> <!-- Looks for member tasks for current projects (deadline is in the future) -->
 					<tr>
 						<td><%= mt.name %></td>
 						<td><a href='/projects/<%= mt.project.id %>'><%= mt.project.name %></a></td>
@@ -183,7 +183,7 @@
 			</thead>
 			<tbody>
 
-			<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
+			<% @pastprojects.each do |p| %>
 				<tr>
 					<td><a href='/projects/<%= p.id %>'><%= p.name %></a></td>
 					<td><%= p.description %></td>
@@ -236,7 +236,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			<% @projects.where(['deadline < ?', DateTime.now]).each do |p| %>
+			<% @pastprojectsbydeadline.each do |p| %>
 				<tr>
 					<td><a href='/projects/<%= p.id %>'><%= p.name %></a></td>
 					<td><%= p.description %></td>

@@ -99,7 +99,7 @@ $(document).ready(function(){
  	width: 100px;
  }
 </style>
-
+<div class='bodyoffile'>
 <h1>Edit Project</h1>
 <form action='/projects/<%= @project.id %>' method='post' class='update_project_form'>
 			<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
@@ -235,3 +235,4 @@ $(document).ready(function(){
 	</tbody>
 </table>
 	<a href="/projects/<%= @project.id %>" class="btn btn-default">Back to Project</a>
+</div>
