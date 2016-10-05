@@ -31,7 +31,7 @@
           </td>
         </tr>
         <tr>
-          <td>Status</td>
+          <td>Project Completion</td>
             <td>
             <% if @project.tasks.count > 0 %>
                 <% total = 0 %>
@@ -154,7 +154,7 @@
 
   </div>
 
- <% else %>
+ <% else %> <!-- if not project manager -->
 
  <div class='panel panel-default'>
   <div class='panel-heading'>
@@ -186,7 +186,7 @@
           </td>
         </tr>
         <tr>
-          <td>Status</td>
+          <td>Project Completion</td>
             <td>
             <% if @project.tasks.count > 0 %>
                 <% total = 0 %>
@@ -203,9 +203,9 @@
             <% end %>
           </td>
         </tr>
-      </tbody>
-    </table>
-        <% if @project.tasks.where(member: current_user).count > 0 %>
+        <tr>
+          <td>Status of your tasks</td>
+          <td>
           <% if @alltasks.where(project_id: @project.id, member: current_user).count > 0 %>
               <% total = 0 %>
               <% complete = 0 %>
@@ -215,10 +215,15 @@
                       <% complete += 1 %>
                   <% end %>
               <% end %>
-              Your tasks are <%= ((complete.to_f/total)*100).to_int %>% complete!
+              <%= ((complete.to_f/total)*100).to_int %>% complete
           <% else %>
               <b>You have no tasks.</b>
           <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+        <% if @project.tasks.where(member: current_user).count > 0 %>
           <h4>Your tasks for this project</h4>
           <table class='table table-bordered'>
             <thead>
