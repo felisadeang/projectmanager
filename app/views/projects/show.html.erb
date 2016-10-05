@@ -55,7 +55,7 @@
       </tbody>
     </table>
     <% if @project.tasks.count > 0 %>
-      <% if @project.tasks.exists?(complete: true)%>
+      <% if @project.tasks.exists?(complete: false)%>
       <h4>Pending Tasks</h4>
       <table class='table table-bordered'>
         <thead>
@@ -85,6 +85,8 @@
           <% end %>
         </tbody>
       </table>
+      <% end %>
+      <% if @project.tasks.exists?(complete: true)%>
       <h4>Completed Tasks</h4>
         <table class='table table-bordered'>
           <thead>
