@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post 'sessions' => 'sessions#create'
   delete 'sessions' => 'sessions#destroy'
   get '/users/:id/past' => 'users#past'
+  get '/search' => 'projects#search'
 
   get 'projects/:id/departments/members/:department_id' => 'projects#members', :format => :json
 

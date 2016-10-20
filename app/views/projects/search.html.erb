@@ -1,0 +1,39 @@
+<!-- <link rel='stylesheet' href='../assets/stylesheets/usersshow.css'> -->
+<div class='container'>
+<div class='row'>
+<div class='bodyoffile'>
+<!-- DETERMINE IF PROJECTS EXIST (EITHER IN PM CAPACITY OR AS TEAM MEMBER) OR NOT -->
+
+	<% if @projects.any? %> <!-- check if there are any projects to determine if tables should be loaded -->
+
+		<h2>Matching Projects</h2>
+			<!-- this version of the current projects table loads for project managers -->
+			<table class='table table-bordered'>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Manager</th>
+					<th>Department</th>
+					<th>Deadline</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @projects.where(['deadline > ?', DateTime.now]).each do |cp| %> <!-- cp for current projects -->
+				<tr>
+					<td><a href='/projects/<%= cp.id %>'><%= cp.name %></a></td>
+					<td><%= cp.description %></td>
+					<td><%= cp.manager.first_name %> <%= cp.manager.last_name %></td>
+					<td><%= cp.manager.department.name %></td>
+					<td><%= cp.deadline.strftime('%b %d %Y') %></td>
+				</tr>
+				<% end %>
+				</tbody>
+			</table>
+	<% else %>
+		<div class='col-md-12'><h3>No projects match your query.</h3></div>
+	<% end %> <!-- end @projects.any? -->
+
+</div> <!-- END bodyoffile-->
+</div> <!-- END row-->
+</div> <!-- END container -->

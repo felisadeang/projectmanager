@@ -7,4 +7,13 @@ class Project < ActiveRecord::Base
 
   validates :name, :manager, presence: :true
   validates_date :deadline, :after => :today
+
+  def self.search(search)
+	  if search
+	  	keyword = search.downcase
+	    where('lower(name) LIKE ? OR lower(description) LIKE ?', "%#{keyword}%", "%#{keyword}%")
+	  else
+	    find(:all)
+	  end
+	end
 end

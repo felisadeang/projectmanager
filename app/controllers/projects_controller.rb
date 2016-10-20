@@ -18,6 +18,11 @@ class ProjectsController < ApplicationController
       end
     end
 
+  def search
+    @projects = Project.search(params[:q]).all
+    @departments = Department.all
+  end
+
   def show
     @project = Project.find(params[:id])
     @departments = Department.all
