@@ -19,8 +19,13 @@ class ProjectsController < ApplicationController
     end
 
   def search
-    @projects = Project.search(params[:q]).all
+    @user = current_user
     @departments = Department.all
+    if @user.manager
+      @projects = Project.search(params[:q]).all
+    else
+      @tasks = Task.search(@user.id, params[:q]).all
+    end
   end
 
   def show

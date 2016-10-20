@@ -4,6 +4,7 @@
 <div class='bodyoffile'>
 <!-- DETERMINE IF PROJECTS EXIST (EITHER IN PM CAPACITY OR AS TEAM MEMBER) OR NOT -->
 
+<% if @user.manager %>
 	<% if @projects.any? %> <!-- check if there are any projects to determine if tables should be loaded -->
 
 		<h2>Matching Projects</h2>
@@ -33,6 +34,52 @@
 	<% else %>
 		<div class='col-md-12'><h3>No projects match your query.</h3></div>
 	<% end %> <!-- end @projects.any? -->
+<% else %> <!-- if user is not a manger -->
+	<% if @tasks.any? %> <!-- check if there are any projects to determine if tables should be loaded -->
+
+		<h2>Matching Tasks</h2>
+			<!-- this version of the current projects table loads for project managers -->
+			<table class='table table-bordered'>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Deadline</th>
+					<th>Priority</th>
+					<th>Complete</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				 <% @tasks.each do |t| %> 
+				<tr>
+					<td><a href='/tasks/<%= t.id %>'><%= t.name %></a></td>
+					<td><%= t.deadline.strftime('%b %d %Y') %></td>
+					<td><% if t.priority === 1 %> <!-- priority assigned with integers. 1 being high -->
+								High
+							<% elsif t.priority === 2 %> <!-- priority assigned with integers. 2 being medium -->
+								Medium
+							<% elsif t.priority === 3 %> <!-- priority assigned with integers. 3 being low -->
+								Low
+							<% else %> <!-- priority assigned with integers. this is if it didn't happen to have been assigned an integer -->
+								None
+							<% end %>
+						</td>
+					
+						<td><% if t.complete === true %>
+							Yes
+							<% else %>
+							No
+							<% end %>
+							
+						</td>
+				</tr>
+				<% end %>
+				</tbody>
+			</table>
+	<% else %>
+		<div class='col-md-12'><h3>No tasks match your query.</h3></div>
+	<% end %> <!-- end @tasks.any? -->
+<% end %>
 
 </div> <!-- END bodyoffile-->
 </div> <!-- END row-->
