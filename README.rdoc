@@ -18,15 +18,6 @@ If needed, run this command also:
 
   bundle update
 
-
-
-Currently, tests are not written for this app but the gem to make this possible is listed. If desired, run this line of code on terminal to install:
-
-
-  rails g rspec:install
-
-
-
 To create database, run these two lines consecutively:
 	
   
