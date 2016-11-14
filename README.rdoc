@@ -1,2 +1,42 @@
 Cahoots is a project-management web app that fosters collaboration, transparency and accountability between managers and team members on cross-departmental projects.
 Technologies: PostgreSQL, Ruby on Rails, Bootstrap
+
+== For a Mac, install Ruby on Rails: 
+	http://pragmaticstudio.com/blog/2010/9/23/install-rails-ruby-mac
+== For a PC: 
+	http://railsinstaller.org/en
+	Download Windows - Ruby 2.2 package
+
+CD into root directory of folder
+Run this command on terminal: 
+
+
+  bundle install
+
+If needed, run this command also: 
+
+
+  bundle update
+
+
+
+Currently, tests are not written for this app but the gem to make this possible is listed. If desired, run this line of code on terminal to install:
+
+
+  rails g rspec:install
+
+
+
+To create database, run these two lines consecutively:
+	
+  
+  rake db:create
+	
+  
+  rake db:migrate
+
+To run the server, type:
+
+  rails server
+  
+Open up browser and open at localhost:3000
